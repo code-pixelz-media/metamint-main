@@ -1,0 +1,301 @@
+/**
+ * Metamint Hero Default Block Styles
+ */
+/* .hero-inner {
+  background: transparent;
+} */
+
+.mm-hero {
+  padding: 125px 0;
+}
+.hero-inner {
+  margin-top: 25px !important;
+}
+/* ==========================================================================
+   Alignment Classes
+   ========================================================================== */
+
+/* Button Row Alignment */
+.block-hero-banner.align-left .mm-btnrow,
+.mm-btnrow.align-left {
+  justify-content: flex-start;
+}
+
+.block-hero-banner.align-center .mm-btnrow,
+.mm-btnrow.align-center {
+  justify-content: center;
+}
+
+.block-hero-banner.align-right .mm-btnrow,
+.mm-btnrow.align-right {
+  justify-content: flex-end;
+}
+
+/* Content Alignment */
+.block-hero-banner.align-left .mm-hero-inner {
+  text-align: left;
+}
+
+.block-hero-banner.align-left .mm-display {
+  text-align: left;
+}
+
+.block-hero-banner.align-left .mm-lede {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+.block-hero-banner.align-center .mm-hero-inner {
+  text-align: center;
+}
+
+.block-hero-banner.align-center .mm-display {
+  text-align: center;
+}
+
+.block-hero-banner.align-center .mm-lede {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.block-hero-banner.align-right .mm-hero-inner {
+  text-align: right;
+}
+
+.block-hero-banner.align-right .mm-display {
+  text-align: right;
+}
+
+.block-hero-banner.align-right .mm-lede {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+/* ==========================================================================
+   Accent Color Classes
+   ========================================================================== */
+
+/* Base Pill & Primary Button using Accent Color */
+.block-hero-banner .mm-pill {
+  background: #0f71731a;
+  color: var(--mm-hero-accent, #0f7173);
+}
+
+.block-hero-banner .mm-btn-ink {
+  background: var(--mm-hero-accent, #0f7173);
+  color: #ffffff;
+  border: 1px solid transparent;
+}
+
+.block-hero-banner .mm-btn-ink:hover {
+  filter: brightness(0.9);
+  color: #ffffff;
+}
+
+/* Green / Teal (Default) */
+.block-hero-banner.color-green,
+.block-hero-banner.color-teal {
+  --mm-hero-accent: #0f7173;
+}
+
+.block-hero-banner.color-green .mm-pill,
+.block-hero-banner.color-teal .mm-pill {
+  background: #0f71731a;
+  color: #0f7173;
+}
+
+.block-hero-banner.color-green .mm-btn-ink,
+.block-hero-banner.color-teal .mm-btn-ink {
+  background: #0f7173;
+  border-color: #0f7173;
+  color: #ffffff;
+}
+
+.block-hero-banner.color-green .mm-btn-ink:hover,
+.block-hero-banner.color-teal .mm-btn-ink:hover {
+  background: #0b5859;
+  border-color: #0b5859;
+  color: #ffffff;
+}
+
+.block-hero-banner.color-green .mm-btn-outline:hover,
+.block-hero-banner.color-teal .mm-btn-outline:hover {
+  border-color: #0f7173;
+  color: #0f7173;
+}
+
+.block-hero-banner.color-green .mm-orb-teal {
+  display: none;
+}
+.block-hero-banner.color-teal .mm-orb-coral {
+  background: rgba(15, 113, 115, 0.15);
+}
+
+.block-hero-banner.color-red .mm-orb-teal {
+  display: none;
+}
+.block-hero-banner.color-teal .mm-orb-coral {
+  background: rgba(15, 113, 115, 0.15);
+}
+
+/* Red / Coral */
+.block-hero-banner.color-red,
+.block-hero-banner.color-coral {
+  --mm-hero-accent: #f05d5e;
+}
+
+.block-hero-banner.color-red .mm-pill,
+.block-hero-banner.color-coral .mm-pill {
+  background: #f05d5e1a;
+  color: #f05d5e;
+}
+
+.block-hero-banner.color-red .mm-btn-ink,
+.block-hero-banner.color-coral .mm-btn-ink {
+  background: #f05d5e;
+  border-color: #f05d5e;
+  color: #ffffff;
+}
+
+.block-hero-banner.color-red .mm-btn-ink:hover,
+.block-hero-banner.color-coral .mm-btn-ink:hover {
+  background: #d84849;
+  border-color: #d84849;
+  color: #ffffff;
+}
+
+.block-hero-banner.color-red .mm-btn-outline:hover,
+.block-hero-banner.color-coral .mm-btn-outline:hover {
+  border-color: #f05d5e;
+  color: #f05d5e;
+}
+
+.block-hero-banner.color-red .mm-orb-teal,
+.block-hero-banner.color-coral .mm-orb-teal {
+  background: rgba(240, 93, 94, 0.15);
+}
+
+/* Tan */
+.block-hero-banner.color-tan {
+  --mm-hero-accent: var(--mm-tan, #d8a47f);
+}
+
+.block-hero-banner.color-tan .mm-pill {
+  background: rgba(216, 164, 127, 0.18);
+  color: #8a6242;
+}
+
+.block-hero-banner.color-tan .mm-btn-ink {
+  background: var(--mm-tan, #d8a47f);
+  color: #ffffff;
+}
+
+.block-hero-banner.color-tan .mm-btn-ink:hover {
+  background: #c9936c;
+}
+
+.block-hero-banner.color-tan .mm-btn-outline:hover {
+  border-color: var(--mm-tan, #d8a47f);
+  color: #8a6242;
+}
+
+/* Purple */
+.block-hero-banner.color-purple {
+  --mm-hero-accent: #7c3aed;
+}
+
+.block-hero-banner.color-purple .mm-pill {
+  background: rgba(124, 58, 237, 0.1);
+  color: #7c3aed;
+}
+
+.block-hero-banner.color-purple .mm-btn-ink {
+  background: #7c3aed;
+  color: #ffffff;
+}
+
+.block-hero-banner.color-purple .mm-btn-ink:hover {
+  background: #6d28d9;
+}
+
+.block-hero-banner.color-purple .mm-btn-outline:hover {
+  border-color: #7c3aed;
+  color: #7c3aed;
+}
+
+.block-hero-banner.color-purple .mm-orb-teal {
+  background: rgba(124, 58, 237, 0.13);
+}
+
+/* Blue */
+.block-hero-banner.color-blue {
+  --mm-hero-accent: #2563eb;
+}
+
+.block-hero-banner.color-blue .mm-pill {
+  background: rgba(37, 99, 235, 0.1);
+  color: #2563eb;
+}
+
+.block-hero-banner.color-blue .mm-btn-ink {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.block-hero-banner.color-blue .mm-btn-ink:hover {
+  background: #1d4ed8;
+}
+
+.block-hero-banner.color-blue .mm-btn-outline:hover {
+  border-color: #2563eb;
+  color: #2563eb;
+}
+
+.block-hero-banner.color-blue .mm-orb-teal {
+  background: rgba(37, 99, 235, 0.13);
+}
+
+/* Ink / Dark */
+.block-hero-banner.color-ink,
+.block-hero-banner.color-dark {
+  --mm-hero-accent: var(--mm-ink, #18181b);
+}
+
+.block-hero-banner.color-ink .mm-pill,
+.block-hero-banner.color-dark .mm-pill {
+  background: rgba(24, 24, 27, 0.08);
+  color: var(--mm-ink, #18181b);
+}
+
+.block-hero-banner.color-ink .mm-btn-ink,
+.block-hero-banner.color-dark .mm-btn-ink {
+  background: var(--mm-ink, #18181b);
+  color: #ffffff;
+}
+
+.block-hero-banner.color-ink .mm-btn-ink:hover,
+.block-hero-banner.color-dark .mm-btn-ink:hover {
+  background: #3f3f46;
+}
+
+/* Accent Color in Hero Title */
+.block-hero-banner .mm-display em,
+.block-hero-banner .mm-display .mm-color-text {
+  color: var(--mm-hero-accent, #0f7173);
+  font-style: normal;
+}
+
+.hero-inner .color-green .mm-orb-teal {
+  display: none;
+}
+.hero-inner .color-green .mm-orb-coral {
+  background: rgba(15, 113, 115, 0.15);
+  top: 160px;
+  right: 8%;
+}
+
+@media (max-width: 992px) {
+  .mm-hero {
+    padding: 60px 0 !important;
+  }
+}

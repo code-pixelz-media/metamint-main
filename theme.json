@@ -1,0 +1,99 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
+  "templateParts": [
+    { "name": "header", "title": "Header", "area": "header" },
+    { "name": "footer", "title": "Footer", "area": "footer" }
+  ],
+  "customTemplates": [
+    { "name": "product", "title": "Product Page", "postTypes": [ "page" ] },
+    { "name": "about", "title": "About Page", "postTypes": [ "page" ] },
+    { "name": "contact", "title": "Contact Page", "postTypes": [ "page" ] }
+  ],
+  "settings": {
+    "appearanceTools": true,
+    "layout": {
+      "contentSize": "720px",
+      "wideSize": "1152px"
+    },
+    "color": {
+      "palette": [
+        { "slug": "canvas", "color": "#FAFAF9", "name": "Canvas" },
+        { "slug": "ink", "color": "#18181B", "name": "Ink" },
+        { "slug": "muted", "color": "#6B7280", "name": "Muted" },
+        { "slug": "teal", "color": "#0F7173", "name": "Metamint Teal" },
+        { "slug": "teal-dark", "color": "#0C5E60", "name": "Teal Dark" },
+        { "slug": "coral", "color": "#F05D5E", "name": "Metamint Coral" },
+        { "slug": "coral-dark", "color": "#D64545", "name": "Coral Dark" },
+        { "slug": "tan", "color": "#D8A47F", "name": "Tan" },
+        { "slug": "line", "color": "#E8E8E4", "name": "Hairline" },
+        { "slug": "wash", "color": "#F4F4F2", "name": "Wash" }
+      ]
+    },
+    "typography": {
+      "fontFamilies": [
+        {
+          "slug": "heading",
+          "name": "Space Grotesk",
+          "fontFamily": "'Space Grotesk', sans-serif"
+        },
+        {
+          "slug": "body",
+          "name": "Instrument Sans",
+          "fontFamily": "'Instrument Sans', sans-serif"
+        },
+        {
+          "slug": "mono",
+          "name": "IBM Plex Mono",
+          "fontFamily": "'IBM Plex Mono', monospace"
+        }
+      ],
+      "fontSizes": [
+        { "slug": "small", "size": "0.875rem", "name": "Small" },
+        { "slug": "medium", "size": "1rem", "name": "Medium" },
+        { "slug": "large", "size": "1.25rem", "name": "Large" },
+        { "slug": "x-large", "size": "2rem", "name": "Extra Large" },
+        { "slug": "display", "size": "clamp(2.5rem, 6vw, 4.5rem)", "name": "Display" }
+      ]
+    },
+    "spacing": {
+      "units": ["px", "rem", "%"],
+      "spacingScale": { "steps": 0 }
+    },
+    "blocks": {
+      "core/navigation": {
+        "layout": {
+          "allowSwitching": false
+        },
+        "navigation": {
+          "allowSwitching": false
+        },
+        "ui": {
+          "enableSubmenuCaret": true
+        }
+      }
+    }
+  },
+  "styles": {
+    "color": {
+      "background": "#FAFAF9",
+      "text": "#18181B"
+    },
+    "typography": {
+      "fontFamily": "var(--wp--preset--font-family--body)",
+      "lineHeight": "1.6"
+    },
+    "elements": {
+      "heading": {
+        "typography": {
+          "fontFamily": "var(--wp--preset--font-family--heading)",
+          "fontWeight": "600",
+          "letterSpacing": "-0.02em"
+        }
+      },
+      "link": {
+        "color": { "text": "#0F7173" }
+      }
+    }
+  }
+}

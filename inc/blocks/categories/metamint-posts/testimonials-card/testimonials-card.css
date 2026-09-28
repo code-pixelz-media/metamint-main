@@ -1,0 +1,150 @@
+/**
+ * Testimonials Card Block Styles
+ */
+
+.testimonials-card {
+  position: relative;
+}
+
+/* Eyebrow / Subtitle */
+.testimonials-card .mm-eyebrow {
+  font-family: var(--mm-mono, 'IBM Plex Mono', monospace);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  margin: 0;
+  color: var(--mm-coral, #F05D5E);
+}
+
+/* Heading */
+.testimonials-card .mm-h2 {
+  font-family: var(--mm-head, 'Space Grotesk', sans-serif);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+  font-size: clamp(1.9rem, 4vw, 3rem);
+  color: var(--mm-ink, #18181B);
+  margin: 12px 0 0;
+}
+
+/* Description */
+.testimonials-card .mm-lede {
+  color: var(--mm-muted, #6B7280);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  max-width: 620px;
+  margin: 20px 0 0;
+}
+
+/* 2-Column Grid */
+.testimonials-card .mm-grid-2 {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: 1fr;
+  margin-top: 48px;
+}
+
+@media (min-width: 768px) {
+  .testimonials-card .mm-grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Card item — RESET <figure> default browser margin: 1em 40px */
+.testimonials-card figure.mm-quote-card,
+.testimonials-card .mm-card.mm-quote-card,
+figure.mm-quote-card {
+  margin: 0;
+  background: #ffffff;
+  border: 1px solid var(--mm-line, #E8E8E4);
+  border-radius: 18px;
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.testimonials-card .mm-card.mm-quote-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.06);
+  border-color: rgba(240, 93, 94, 0.3);
+}
+
+/* Rating Stars */
+.testimonials-card .mm-stars {
+  color: #FBBF24;
+  letter-spacing: 3px;
+  font-size: 1rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+}
+
+/* Quote Text — RESET <blockquote> user-agent margin */
+.testimonials-card .mm-quote-card blockquote,
+.mm-quote-card blockquote {
+  margin: 18px 0 0 0;
+  padding: 0;
+  border: none;
+  font-style: normal;
+  font-family: var(--mm-body, 'Instrument Sans', sans-serif);
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: var(--mm-ink, #18181B);
+  flex: 1;
+}
+
+/* Author info */
+.testimonials-card .mm-quote-card figcaption,
+.mm-quote-card figcaption {
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid var(--mm-line, #E8E8E4);
+}
+
+.testimonials-card .mm-quote-card figcaption b,
+.mm-quote-card figcaption b {
+  display: block;
+  font-family: var(--mm-head, 'Space Grotesk', sans-serif);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--mm-ink, #18181B);
+  line-height: 1.3;
+}
+
+.testimonials-card .mm-quote-card figcaption span,
+.mm-quote-card figcaption span {
+  display: block;
+  font-family: var(--mm-body, 'Instrument Sans', sans-serif);
+  color: var(--mm-muted, #6B7280);
+  font-size: 0.82rem;
+  line-height: 1.4;
+  margin-top: 3px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .testimonials-card .mm-grid-2 {
+    margin-top: 36px;
+    gap: 18px;
+  }
+
+  .testimonials-card figure.mm-quote-card,
+  .testimonials-card .mm-card.mm-quote-card {
+    padding: 24px 20px;
+  }
+
+  .testimonials-card .mm-quote-card blockquote {
+    font-size: 0.95rem;
+    line-height: 1.55;
+    margin-top: 14px;
+  }
+
+  .testimonials-card .mm-quote-card figcaption {
+    margin-top: 20px;
+    padding-top: 14px;
+  }
+}

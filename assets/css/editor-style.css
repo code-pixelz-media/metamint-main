@@ -1,0 +1,17 @@
+:root {
+  --mm-bg:       #FAFAF9;
+  --mm-ink:      #18181B;
+  --mm-muted:    #6B7280;
+  --mm-line:     #E8E8E4;
+  --mm-wash:     #F4F4F2;
+  --mm-teal:     #0F7173;
+  --color-brand: #0F7173;
+  --mm-teal-d:   #0C5E60;
+  --mm-coral:    #F05D5E;
+  --mm-tan:      #D8A47F;
+  --mm-head:     'Space Grotesk', sans-serif;
+  --mm-body:     'Instrument Sans', sans-serif;
+  --mm-mono:     'IBM Plex Mono', monospace;
+  --mm-accent:   var(--mm-teal);
+  --mm-accent-d: var(--mm-teal-d);
+}

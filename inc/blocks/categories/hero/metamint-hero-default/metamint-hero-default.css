@@ -1,0 +1,196 @@
+/**
+ * Metamint Hero Default Block Styles
+ */
+.mm-hero {
+  padding: 125px 0;
+}
+.block-hero-banner {
+  margin-top: 25px !important;
+}
+/* ==========================================================================
+   Alignment Classes
+   ========================================================================== */
+
+/* Button Row Alignment */
+.block-hero-banner.align-left .mm-btnrow,
+.mm-btnrow.align-left {
+  justify-content: flex-start;
+}
+
+.block-hero-banner.align-center .mm-btnrow,
+.mm-btnrow.align-center {
+  justify-content: center;
+}
+
+.block-hero-banner.align-right .mm-btnrow,
+.mm-btnrow.align-right {
+  justify-content: flex-end;
+}
+
+/* Content Alignment */
+.block-hero-banner.align-left .mm-hero-inner {
+  text-align: left;
+}
+
+.block-hero-banner.align-left .mm-display {
+  text-align: left;
+}
+
+.block-hero-banner.align-left .mm-lede {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+.block-hero-banner.align-center .mm-hero-inner {
+  text-align: center;
+}
+
+.block-hero-banner.align-center .mm-display {
+  text-align: center;
+}
+
+.block-hero-banner.align-center .mm-lede {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.block-hero-banner.align-right .mm-hero-inner {
+  text-align: right;
+}
+
+.block-hero-banner.align-right .mm-display {
+  text-align: right;
+}
+
+.block-hero-banner.align-right .mm-lede {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+/* ==========================================================================
+   Accent Color Classes
+   ========================================================================== */
+
+/* Teal (Default) */
+.block-hero-banner.color-teal {
+  --mm-hero-accent: var(--mm-teal, #0f7173);
+}
+
+.block-hero-banner.color-teal .mm-pill {
+  background: rgba(15, 113, 115, 0.1);
+  color: var(--mm-teal, #0f7173);
+}
+
+.block-hero-banner.color-teal .mm-btn-ink:hover {
+  background: var(--mm-teal, #0f7173);
+}
+
+.block-hero-banner.color-teal .mm-btn-outline:hover {
+  border-color: var(--mm-teal, #0f7173);
+  color: var(--mm-teal, #0f7173);
+}
+
+/* Coral */
+.block-hero-banner.color-coral {
+  --mm-hero-accent: var(--mm-coral, #f05d5e);
+}
+
+.block-hero-banner.color-coral .mm-pill {
+  background: rgba(240, 93, 94, 0.1);
+  color: var(--mm-coral, #f05d5e);
+}
+
+.block-hero-banner.color-coral .mm-btn-ink:hover {
+  background: var(--mm-coral, #f05d5e);
+}
+
+.block-hero-banner.color-coral .mm-btn-outline:hover {
+  border-color: var(--mm-coral, #f05d5e);
+  color: var(--mm-coral, #f05d5e);
+}
+
+.block-hero-banner.color-coral .mm-orb-teal {
+  background: rgba(240, 93, 94, 0.15);
+}
+
+/* Tan */
+.block-hero-banner.color-tan {
+  --mm-hero-accent: var(--mm-tan, #d8a47f);
+}
+
+.block-hero-banner.color-tan .mm-pill {
+  background: rgba(216, 164, 127, 0.18);
+  color: #8a6242;
+}
+
+.block-hero-banner.color-tan .mm-btn-ink:hover {
+  background: var(--mm-tan, #d8a47f);
+}
+
+.block-hero-banner.color-tan .mm-btn-outline:hover {
+  border-color: var(--mm-tan, #d8a47f);
+  color: #8a6242;
+}
+
+/* Purple */
+.block-hero-banner.color-purple {
+  --mm-hero-accent: #7c3aed;
+}
+
+.block-hero-banner.color-purple .mm-pill {
+  background: rgba(124, 58, 237, 0.1);
+  color: #7c3aed;
+}
+
+.block-hero-banner.color-purple .mm-btn-ink:hover {
+  background: #7c3aed;
+}
+
+.block-hero-banner.color-purple .mm-btn-outline:hover {
+  border-color: #7c3aed;
+  color: #7c3aed;
+}
+
+.block-hero-banner.color-purple .mm-orb-teal {
+  background: rgba(124, 58, 237, 0.13);
+}
+
+/* Blue */
+.block-hero-banner.color-blue {
+  --mm-hero-accent: #2563eb;
+}
+
+.block-hero-banner.color-blue .mm-pill {
+  background: rgba(37, 99, 235, 0.1);
+  color: #2563eb;
+}
+
+.block-hero-banner.color-blue .mm-btn-ink:hover {
+  background: #2563eb;
+}
+
+.block-hero-banner.color-blue .mm-btn-outline:hover {
+  border-color: #2563eb;
+  color: #2563eb;
+}
+
+.block-hero-banner.color-blue .mm-orb-teal {
+  background: rgba(37, 99, 235, 0.13);
+}
+
+/* Ink / Dark */
+.block-hero-banner.color-ink,
+.block-hero-banner.color-dark {
+  --mm-hero-accent: var(--mm-ink, #18181b);
+}
+
+.block-hero-banner.color-ink .mm-pill,
+.block-hero-banner.color-dark .mm-pill {
+  background: rgba(24, 24, 27, 0.08);
+  color: var(--mm-ink, #18181b);
+}
+
+.block-hero-banner.color-ink .mm-btn-ink:hover,
+.block-hero-banner.color-dark .mm-btn-ink:hover {
+  background: #3f3f46;
+}

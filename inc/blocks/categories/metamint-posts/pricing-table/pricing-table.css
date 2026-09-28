@@ -1,0 +1,127 @@
+#pricing .mm-lede {
+  text-align: center;
+  max-width: 100%;
+}
+
+/* Inline name row for popular plan (table 2) */
+#pricing .mm-plan-name-row {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+}
+
+#pricing .mm-plan-name-row .mm-h4 {
+  margin: 0;
+}
+
+#pricing .mmhd-addon-price {
+  font-family: var(--mm-head);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+  color: var(--mm-ink);
+}
+
+#pricing .mm-plan-name-after {
+  font-family: var(--mm-head);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+  color: var(--mm-ink);
+}
+
+/* Color Themes */
+#pricing.theme-green {
+  --mm-accent: #0f7173;
+  --mm-accent-d: #0c5e60;
+}
+
+#pricing.theme-red {
+  --mm-accent: #f05d5e;
+  --mm-accent-d: #d64545;
+}
+
+#pricing .mm-eyebrow {
+  color: var(--mm-accent);
+}
+
+/* Grid spacing — give popular card room for its flag badge */
+#pricing .mm-grid-2,
+#pricing .mm-grid-3 {
+  padding-top: 16px;
+}
+
+/* Card container */
+#pricing .mm-plan {
+  position: relative;
+}
+
+/* Second table (popular plan) */
+#pricing .mm-plan-popular,
+#pricing .mm-plan-popular:hover {
+  border-width: 2px;
+  border-color: var(--mm-accent);
+}
+
+#pricing .mm-plan-popular .mm-plan-flag {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 5px 18px;
+  font-family: var(--mm-body, "Instrument Sans", sans-serif);
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  color: #fff;
+  background: var(--mm-accent);
+  white-space: nowrap;
+  z-index: 2;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* Tick color */
+#pricing .mm-checklist li::before {
+  border-left-color: var(--mm-accent);
+  border-bottom-color: var(--mm-accent);
+}
+
+/* Popular plan button */
+#pricing .mm-plan-popular .mm-btn:not(.mm-btn-outline) {
+  background: var(--mm-accent);
+  color: #fff;
+}
+
+#pricing .mm-plan-popular .mm-btn:not(.mm-btn-outline):hover {
+  background: var(--mm-accent-d);
+}
+
+/* Save discount badge */
+#pricing .mm-price-save {
+  background: var(--mm-accent);
+  color: #fff;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  #pricing .mm-card {
+    padding: 24px 20px;
+  }
+
+  #pricing .mm-plan-flag {
+    font-size: 0.72rem;
+    padding: 4px 12px;
+  }
+
+  #pricing .mm-checklist {
+    margin: 16px 0 24px;
+  }
+}

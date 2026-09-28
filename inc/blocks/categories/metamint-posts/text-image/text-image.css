@@ -1,0 +1,129 @@
+/**
+ * Text Image Block Styles
+ */
+
+.block-text-image {
+  padding: 80px 0;
+}
+
+/* ---- Two-column inner ---- */
+.block-text-image .mm-ti-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+}
+
+/* ---- Image Left (default) ---- */
+.block-text-image.image-left .mm-ti-inner {
+  grid-template-areas: "image text";
+}
+
+.block-text-image.image-left .mm-ti-image-col {
+  grid-area: image;
+}
+
+.block-text-image.image-left .mm-ti-text-col {
+  grid-area: text;
+}
+
+/* ---- Image Right ---- */
+.block-text-image.image-right .mm-ti-inner {
+  grid-template-areas: "text image";
+}
+
+.block-text-image.image-right .mm-ti-image-col {
+  grid-area: image;
+}
+
+.block-text-image.image-right .mm-ti-text-col {
+  grid-area: text;
+}
+
+/* ---- Image column ---- */
+.block-text-image .mm-ti-figure {
+  margin: 0;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+}
+
+.block-text-image .mm-ti-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.block-text-image .mm-ti-figure:hover .mm-ti-img {
+  transform: scale(1.03);
+}
+
+/* ---- Text column ---- */
+.block-text-image .mm-ti-text-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+/* Eyebrow / Subtitle */
+.block-text-image .mm-ti-subtitle {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mm-accent, #0f7173);
+  margin: 0;
+}
+
+/* Title */
+.block-text-image .mm-ti-title {
+  margin: 0;
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1.2;
+  color: #0f172a;
+}
+
+/* Description */
+.block-text-image .mm-ti-desc {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #475569;
+}
+
+.block-text-image .mm-ti-desc p {
+  margin: 0 0 12px 0;
+}
+
+.block-text-image .mm-ti-desc p:last-child {
+  margin-bottom: 0;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 900px) {
+  .block-text-image .mm-ti-inner {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  /* Always stack image above text on mobile, regardless of style */
+  .block-text-image.image-left .mm-ti-inner,
+  .block-text-image.image-right .mm-ti-inner {
+    grid-template-areas:
+      "image"
+      "text";
+  }
+}
+
+@media (max-width: 640px) {
+  .block-text-image {
+    padding: 56px 0;
+  }
+
+  .block-text-image .mm-ti-inner {
+    gap: 28px;
+  }
+}

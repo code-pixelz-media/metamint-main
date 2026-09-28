@@ -1,0 +1,70 @@
+/**
+ * Home Manifesto Block Styles
+ */
+
+/* Subtitle / Subheading */
+.home-manifesto .mm-eyebrow,
+.home-manifesto.theme-green .mm-eyebrow,
+.home-manifesto.theme-green .mm-eyebrow.mm-teal {
+  color: #0f7173;
+}
+
+.home-manifesto.theme-red .mm-eyebrow,
+.home-manifesto.theme-red .mm-eyebrow.mm-teal {
+  color: #f05d5e !important;
+}
+
+/* ==========================================================================
+   Style 1 (Default): Standard text-colored tagline
+   ========================================================================== */
+.home-manifesto.style-1 .mm-chapter-n,
+.home-manifesto.style-1.theme-green .mm-chapter-n,
+.home-manifesto:not(.style-2) .mm-chapter-n {
+  color: #0f7173;
+}
+
+.home-manifesto.style-1.theme-red .mm-chapter-n,
+.home-manifesto.theme-red:not(.style-2) .mm-chapter-n {
+  color: #f05d5e !important;
+}
+
+/* ==========================================================================
+   Style 2: Circular badge with color theme background & white text
+   ========================================================================== */
+.home-manifesto.style-2 .mm-chapter-n {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  color: #ffffff !important;
+  letter-spacing: 0;
+  line-height: 1;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+/* Style 2 Green Background */
+.home-manifesto.style-2 .mm-chapter-n,
+.home-manifesto.style-2.theme-green .mm-chapter-n {
+  background: #0f7173;
+  color: #ffffff !important;
+}
+
+/* Style 2 Red Background */
+.home-manifesto.style-2.theme-red .mm-chapter-n {
+  background: #f05d5e;
+  color: #ffffff !important;
+}
+
+/* ==========================================================================
+   Style 2: Three-Column Card Grid
+   ========================================================================== */
+@media (min-width: 768px) {
+  .home-manifesto.style-2 .mm-grid-2,
+  .home-manifesto.style-2 .mm-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
