@@ -2057,6 +2057,16 @@ figure.mm-quote-card {
 .woocommerce ul.products li.product img {
   border-radius: 12px;
 }
+body.single-post .entry-content ul,
+body.single-post .entry-content ol {
+  margin: 1em 0 !important;
+  padding: 0 24px !important;
+}
+
+body.single-post .entry-content ul li,
+body.single-post .entry-content ol li {
+  padding: 0 !important;
+}
 
 @media (min-width: 320px) and (max-width: 960px) {
   .mm-footer {

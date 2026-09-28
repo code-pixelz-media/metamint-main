@@ -1,0 +1,541 @@
+/**
+ * Blog Posts Block Styles
+ * Designed as per Metamint design system
+ */
+
+.mm-section.mm-wrap.block-blog-posts {
+  padding: 0;
+  margin-bottom: 48px;
+}
+
+/* ==========================================================================
+   Featured Section (Two-column Featured Card)
+   ========================================================================== */
+
+.featured {
+  --muted: var(--mm-muted, #6b7280);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: stretch;
+  background: #ffffff;
+  border: 1px solid var(--mm-line, #e8e8e4);
+  border-radius: 18px;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding: 0;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.featured:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.06);
+  border-color: rgba(15, 113, 115, 0.3);
+}
+
+/* Left Column: Thumbnail Image */
+.blog-featured-thumbnail {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  min-height: 380px;
+  background: var(--mm-wash, #f4f4f2);
+}
+
+.blog-featured-thumbnail a {
+  display: block;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+}
+
+.blog-featured-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.featured:hover .blog-featured-thumbnail img {
+  transform: scale(1.03);
+}
+
+/* Right Column: Content Body */
+.blog-featured-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 44px;
+  gap: 16px;
+  box-sizing: border-box;
+}
+
+/* Category Badge / Tag */
+.blog-featured-tag,
+.blog-card-tag {
+  display: inline-flex;
+  margin: 0;
+}
+
+.blog-featured-tag ul.post-categories,
+.blog-card-tag ul.post-categories {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.blog-featured-tag ul.post-categories li,
+.blog-card-tag ul.post-categories li {
+  margin: 0;
+  padding: 0;
+}
+
+.blog-featured-tag ul.post-categories li a,
+.blog-featured-tag a,
+.blog-card-tag ul.post-categories li a,
+.blog-card-tag a {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 5px 14px;
+  font-family: var(--mm-mono, "IBM Plex Mono", monospace);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  background: rgba(15, 113, 115, 0.1);
+  color: var(--mm-teal, #0f7173);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.blog-featured-tag ul.post-categories li a:hover,
+.blog-featured-tag a:hover,
+.blog-card-tag ul.post-categories li a:hover,
+.blog-card-tag a:hover {
+  background: var(--mm-teal, #0f7173);
+  color: #ffffff;
+}
+
+/* Featured Title */
+.blog-featured-body h2 {
+  font-family: var(--mm-head, "Space Grotesk", sans-serif);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+  color: var(--mm-ink, #18181b);
+  margin: 0;
+}
+
+.blog-featured-body h2 a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.blog-featured-body h2 a:hover {
+  color: var(--mm-teal, #0f7173);
+}
+
+/* Featured Description */
+.blog-featured-body p {
+  font-family: var(--mm-body, "Instrument Sans", sans-serif);
+  color: var(--mm-muted, #6b7280);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Featured Meta */
+.blog-featured-meta {
+  font-family: var(--mm-mono, "IBM Plex Mono", monospace);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--mm-muted, #6b7280);
+  margin: 2px 0;
+}
+
+/* Featured Button */
+.blog-featured-body .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 12px 26px;
+  font-family: var(--mm-body, "Instrument Sans", sans-serif);
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: 0;
+  cursor: pointer;
+  background: var(--mm-ink, #18181b);
+  color: #ffffff;
+  transition:
+    transform 0.15s ease,
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
+  margin-top: 6px;
+}
+
+.blog-featured-body .btn:hover {
+  background: var(--mm-teal, #0f7173);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(15, 113, 115, 0.25);
+}
+
+/* ==========================================================================
+   Three-Column Grid Section & Gap
+   ========================================================================== */
+
+/* Gap in between the featured card and other cards */
+.mm-section.mm-wrap.block-blog-grid {
+  padding: 0 0 96px 0;
+  margin-top: 48px;
+  margin-block-start: 48px;
+}
+
+.block-blog-grid {
+  margin-top: 48px;
+  margin-block-start: 48px;
+}
+
+.block-blog-grid .blog-posts-grid {
+  margin-top: 0;
+}
+
+/* Card Container */
+.blog-card {
+  --muted: var(--mm-muted, #6b7280);
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border: 1px solid var(--mm-line, #e8e8e4);
+  border-radius: 18px;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding: 0;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.blog-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.06);
+  border-color: rgba(15, 113, 115, 0.3);
+}
+
+/* Top: Thumbnail */
+.blog-card-thumbnail {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+  background: var(--mm-wash, #f4f4f2);
+}
+
+.blog-card-thumbnail a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+}
+
+.blog-card-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.blog-card:hover .blog-card-thumbnail img {
+  transform: scale(1.04);
+}
+
+/* Bottom: Content */
+.blog-card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 24px;
+  gap: 12px;
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+
+/* Grid Card Title */
+.blog-card-body h3 {
+  font-family: var(--mm-head, "Space Grotesk", sans-serif);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  font-size: 1.25rem;
+  color: var(--mm-ink, #18181b);
+  margin: 0;
+}
+
+.blog-card-body h3 a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.blog-card-body h3 a:hover {
+  color: var(--mm-teal, #0f7173);
+}
+
+/* Grid Card Description */
+.blog-card-body p {
+  font-family: var(--mm-body, "Instrument Sans", sans-serif);
+  color: var(--mm-muted, #6b7280);
+  font-size: 0.95rem;
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* Grid Card Meta */
+.blog-card-meta {
+  font-family: var(--mm-mono, "IBM Plex Mono", monospace);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--mm-muted, #6b7280);
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+/* Grid Card Button */
+.blog-card-body .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 10px 22px;
+  font-family: var(--mm-body, "Instrument Sans", sans-serif);
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: 0;
+  cursor: pointer;
+  background: var(--mm-ink, #18181b);
+  color: #ffffff;
+  transition:
+    transform 0.15s ease,
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
+  margin-top: 4px;
+}
+
+.blog-card-body .btn:hover {
+  background: var(--mm-teal, #0f7173);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(15, 113, 115, 0.25);
+}
+
+/* ==========================================================================
+   Thumbnail Fallback: Centered Metamint Logo
+   ========================================================================== */
+
+.blog-thumbnail-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+  background: var(--mm-wash, #f4f4f2);
+  padding: 32px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.blog-thumbnail-fallback .mm-thumbnail-logo {
+  max-width: 180px;
+  max-height: 80px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+  transition: transform 0.4s ease;
+}
+
+.blog-thumbnail-fallback .mm-thumbnail-brand {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 0 auto;
+  transition: transform 0.4s ease;
+}
+
+.blog-thumbnail-fallback .mm-brand-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.blog-thumbnail-fallback .mm-brand-name {
+  font-family: var(--mm-head, "Space Grotesk", sans-serif);
+  font-weight: 700;
+  font-size: 1.35rem;
+  letter-spacing: -0.01em;
+  color: var(--mm-ink, #18181b);
+}
+
+.blog-card .blog-thumbnail-fallback .mm-brand-name {
+  font-size: 1.1rem;
+}
+
+.blog-card .blog-thumbnail-fallback .mm-thumbnail-logo {
+  max-width: 140px;
+  max-height: 60px;
+}
+
+.blog-thumbnail-fallback .mm-logo-caret {
+  color: var(--mm-teal, #0f7173);
+}
+
+.featured:hover .blog-thumbnail-fallback .mm-thumbnail-logo,
+.featured:hover .blog-thumbnail-fallback .mm-thumbnail-brand,
+.blog-card:hover .blog-thumbnail-fallback .mm-thumbnail-logo,
+.blog-card:hover .blog-thumbnail-fallback .mm-thumbnail-brand {
+  transform: scale(1.05);
+}
+
+/* ==========================================================================
+   Blog Pagination (Horizontally Centered)
+   ========================================================================== */
+
+.blog-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 56px;
+  width: 100%;
+}
+
+.blog-pagination .page-numbers {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  height: 42px;
+  padding: 0 14px;
+  border-radius: 999px;
+  font-family: var(--mm-mono, "IBM Plex Mono", monospace);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--mm-ink, #18181b);
+  background: #ffffff;
+  border: 1px solid var(--mm-line, #e8e8e4);
+  text-decoration: none;
+  box-sizing: border-box;
+  transition:
+    transform 0.15s ease,
+    background-color 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.blog-pagination a.page-numbers:hover {
+  background: var(--mm-teal, #0f7173);
+  color: #ffffff;
+  border-color: var(--mm-teal, #0f7173);
+  transform: translateY(-2px);
+}
+
+.blog-pagination .page-numbers.current {
+  background: var(--mm-ink, #18181b);
+  color: #ffffff;
+  border-color: var(--mm-ink, #18181b);
+  cursor: default;
+}
+
+.blog-pagination .page-numbers.dots {
+  background: transparent;
+  border-color: transparent;
+  color: var(--mm-muted, #6b7280);
+  min-width: 24px;
+  cursor: default;
+}
+
+.blog-pagination .page-numbers.prev,
+.blog-pagination .page-numbers.next {
+  padding: 0 18px;
+  font-family: var(--mm-body, "Instrument Sans", sans-serif);
+  font-size: 0.88rem;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+@media (max-width: 860px) {
+  .mm-section.mm-wrap.block-blog-posts {
+    margin-bottom: 32px;
+  }
+
+  .mm-section.mm-wrap.block-blog-grid,
+  .block-blog-grid {
+    margin-top: 32px;
+    margin-block-start: 32px;
+  }
+
+  .featured {
+    grid-template-columns: 1fr;
+  }
+
+  .blog-featured-thumbnail {
+    min-height: 240px;
+    height: 260px;
+  }
+
+  .blog-featured-body {
+    padding: 30px 24px;
+    gap: 14px;
+  }
+
+  .blog-card-thumbnail {
+    height: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .blog-featured-thumbnail {
+    min-height: 200px;
+    height: 220px;
+  }
+
+  .blog-featured-body {
+    padding: 24px 20px;
+  }
+
+  .blog-featured-body .btn,
+  .blog-card-body .btn {
+    width: 100%;
+    text-align: center;
+  }
+}
