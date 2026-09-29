@@ -19,13 +19,36 @@
 /* Grid Layout */
 .icon-card-section .mm-icon-cards-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(var(--grid-columns, 3), 1fr);
   gap: 24px;
   margin-top: 40px;
 }
 
+.icon-card-section .mm-icon-cards-grid.cols-1,
+.icon-card-section.cols-1 .mm-icon-cards-grid {
+  grid-template-columns: 1fr;
+}
+
+.icon-card-section .mm-icon-cards-grid.cols-2,
+.icon-card-section.cols-2 .mm-icon-cards-grid {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.icon-card-section .mm-icon-cards-grid.cols-3,
+.icon-card-section.cols-3 .mm-icon-cards-grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.icon-card-section .mm-icon-cards-grid.cols-4,
+.icon-card-section.cols-4 .mm-icon-cards-grid {
+  grid-template-columns: repeat(4, 1fr);
+}
+
 @media (max-width: 991px) {
-  .icon-card-section .mm-icon-cards-grid {
+  .icon-card-section .mm-icon-cards-grid.cols-4,
+  .icon-card-section.cols-4 .mm-icon-cards-grid,
+  .icon-card-section .mm-icon-cards-grid.cols-3,
+  .icon-card-section.cols-3 .mm-icon-cards-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
@@ -43,6 +66,21 @@
   border: 1px solid var(--mm-line, #e2e8f0);
   border-radius: 18px;
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  text-decoration: none;
+  color: inherit;
+}
+
+.icon-card-section a.mm-icon-card-item,
+.icon-card-section .mm-icon-card-item.is-linked {
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+
+.icon-card-section a.mm-icon-card-item:focus-visible,
+.icon-card-section .mm-icon-card-item.is-linked:focus-visible {
+  outline: 2px solid var(--mm-accent, #0f7173);
+  outline-offset: 4px;
 }
 
 .icon-card-section .mm-icon-card-item:hover {
@@ -53,6 +91,20 @@
 
 .icon-card-section.theme-red .mm-icon-card-item:hover {
   border-color: rgba(240, 93, 94, 0.3);
+}
+
+.icon-card-section a.mm-icon-card-item:hover .mm-icon-card-title,
+.icon-card-section .mm-icon-card-item.is-linked:hover .mm-icon-card-title {
+  color: var(--mm-accent, #0f7173);
+}
+
+.icon-card-section.theme-red a.mm-icon-card-item:hover .mm-icon-card-title,
+.icon-card-section.theme-red .mm-icon-card-item.is-linked:hover .mm-icon-card-title {
+  color: var(--mm-accent, #f05d5e);
+}
+
+.icon-card-section .mm-icon-card-title {
+  transition: color 0.2s ease;
 }
 
 /* Base Icon Box */

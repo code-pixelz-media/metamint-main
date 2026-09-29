@@ -47,6 +47,7 @@ if (empty($ic_cards_repeater) && !empty($block_data['ic_cards_repeater']) && is_
       'ic_icon'          => $block_data['ic_cards_repeater_' . $i . '_ic_icon'] ?? '',
       'ic_title'         => $block_data['ic_cards_repeater_' . $i . '_ic_title'] ?? '',
       'ic_cards_content' => $block_data['ic_cards_repeater_' . $i . '_ic_cards_content'] ?? '',
+      'ic_card_link'     => $block_data['ic_cards_repeater_' . $i . '_ic_card_link'] ?? '',
     ];
   }
 }
@@ -121,6 +122,31 @@ if (!empty($block_data['ic_background_color'])) {
   $ic_background_color = get_field('ic_background_color', $block['id'] ?? null) ?: (get_field('mf_background_color', $block['id'] ?? null) ?: (get_field('ic_background_color') ?: (get_field('mf_background_color') ?: '')));
 }
 
+// Columns: ic_theme_column (Choices: Column 1, Column 2, Column 3, Column 4)
+$ic_theme_column = '';
+if (!empty($block_data['ic_theme_column'])) {
+  $ic_theme_column = $block_data['ic_theme_column'];
+} elseif (!empty($block_data['mf_theme_column'])) {
+  $ic_theme_column = $block_data['mf_theme_column'];
+} elseif (!empty($block_data['ic_style']['ic_theme_column'])) {
+  $ic_theme_column = $block_data['ic_style']['ic_theme_column'];
+} elseif (!empty($ic_inner_content['ic_theme_column'])) {
+  $ic_theme_column = $ic_inner_content['ic_theme_column'];
+} else {
+  $ic_theme_column = get_field('ic_theme_column', $block['id'] ?? null) ?: (get_field('mf_theme_column', $block['id'] ?? null) ?: (get_field('ic_theme_column') ?: (get_field('mf_theme_column') ?: 'Column 3')));
+}
+
+if (is_array($ic_theme_column)) {
+  $ic_theme_column = $ic_theme_column['value'] ?? ($ic_theme_column['label'] ?? 'Column 3');
+}
+
+$column_num = 3;
+$col_str = trim((string) $ic_theme_column);
+if (preg_match('/[1-4]/', $col_str, $matches)) {
+  $column_num = (int) $matches[0];
+}
+$columns_class = 'cols-' . $column_num;
+
 $section_inline_styles = [];
 if (!empty($ic_background_color)) {
   $section_inline_styles[] = 'background-color: ' . esc_attr(trim((string) $ic_background_color));
@@ -130,7 +156,7 @@ $section_inline_styles[] = '--mm-accent-d: ' . esc_attr($theme_accent_d);
 
 $section_style_attr = !empty($section_inline_styles) ? ' style="' . implode('; ', $section_inline_styles) . ';"' : '';
 ?>
-<section class="mm-section mm-wash icon-card-section <?= esc_attr($theme_class); ?> <?= esc_attr($style_class); ?>"<?= $section_style_attr; ?> data-testid="icon-card">
+<section class="mm-section mm-wash icon-card-section <?= esc_attr($theme_class); ?> <?= esc_attr($style_class); ?> <?= esc_attr($columns_class); ?>"<?= $section_style_attr; ?> data-testid="icon-card">
   <div class="mm-wrap">
     <?php if (!empty($ic_subtitle)): ?>
       <p class="mm-eyebrow"><?php echo esc_html($ic_subtitle); ?></p>
@@ -145,11 +171,38 @@ $section_style_attr = !empty($section_inline_styles) ? ' style="' . implode('; '
     <?php endif; ?>
 
     <?php if (!empty($ic_cards_repeater) && is_array($ic_cards_repeater)): ?>
-      <div class="mm-grid-3 mm-icon-cards-grid">
+      <div class="mm-grid-<?= esc_attr($column_num); ?> mm-icon-cards-grid <?= esc_attr($columns_class); ?>" style="--grid-columns: <?= esc_attr($column_num); ?>;">
         <?php foreach ($ic_cards_repeater as $index => $card):
           $card_title   = !empty($card['ic_title']) ? $card['ic_title'] : '';
           $card_content = !empty($card['ic_cards_content']) ? $card['ic_cards_content'] : '';
           $card_icon    = !empty($card['ic_icon']) ? $card['ic_icon'] : '';
+          $card_link    = !empty($card['ic_card_link']) ? $card['ic_card_link'] : '';
+
+          $link_url = '';
+          $link_target = '';
+
+          if (is_array($card_link)) {
+            $link_url = $card_link['url'] ?? '';
+            if (!empty($card_link['target'])) {
+              $link_target = ' target="' . esc_attr($card_link['target']) . '"';
+              if (strpos($card_link['target'], '_blank') !== false) {
+                $link_target .= ' rel="noopener noreferrer"';
+              }
+            }
+          } elseif (is_numeric($card_link)) {
+            $link_url = get_permalink($card_link) ?: '';
+          } elseif (is_string($card_link)) {
+            $link_url = trim($card_link);
+          }
+
+          if (!empty($link_url)) {
+            $card_content = preg_replace('/<\/?a\b[^>]*>/i', '', $card_content);
+          }
+
+          $card_tag = !empty($link_url) ? 'a' : 'article';
+          $card_attrs = !empty($link_url)
+            ? ' href="' . esc_url($link_url) . '"' . $link_target
+            : '';
 
           $icon_url = '';
           $icon_alt = $card_title ?: ('Icon ' . ($index + 1));
@@ -171,7 +224,7 @@ $section_style_attr = !empty($section_inline_styles) ? ' style="' . implode('; '
 
           $card_slug = !empty($card_title) ? sanitize_title($card_title) : ($index + 1);
           ?>
-          <article class="mm-card mm-icon-card-item" data-testid="icon-card-item-<?php echo esc_attr($card_slug); ?>">
+          <<?php echo $card_tag; ?> class="mm-card mm-icon-card-item<?php echo !empty($link_url) ? ' is-linked' : ''; ?>"<?php echo $card_attrs; ?> data-testid="icon-card-item-<?php echo esc_attr($card_slug); ?>">
             <?php if ($style_class === 'style-3'): ?>
               <div class="mm-icon-card-header">
                 <?php if (!empty($icon_url)): ?>
@@ -205,7 +258,7 @@ $section_style_attr = !empty($section_inline_styles) ? ' style="' . implode('; '
                 <?php endif; ?>
               </div>
             <?php endif; ?>
-          </article>
+          </<?php echo $card_tag; ?>>
         <?php endforeach; ?>
       </div>
     <?php endif; ?>

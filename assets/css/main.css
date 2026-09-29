@@ -416,12 +416,7 @@ header
     color 0.15s,
     background-color 0.15s;
 }
-.mm-nav-links > li:hover,
-.mm-nav-links .current-menu-item > a,
-.mm-nav-links .current_page_item > a {
-  color: var(--mm-teal);
-  background: rgba(15, 113, 115, 0.08);
-}
+
 @media (min-width: 860px) {
   .mm-nav-links {
     display: flex;
@@ -1648,7 +1643,7 @@ figure.mm-quote-card {
   padding: 0 24px;
 }
 .mm-nav-links > li:hover,
-.mm-nav-links .current-menu-item > li:hover {
+.mm-nav-links li.current-menu-item {
   color: var(--mm-teal);
   background: rgba(15, 113, 115, 0.08);
   border-radius: 50px;
