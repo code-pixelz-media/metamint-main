@@ -351,6 +351,7 @@ header
   gap: 14px;
   justify-content: center;
   margin-top: 40px;
+  align-items: center;
 }
 .mm-btnrow.mm-left {
   justify-content: flex-start;
@@ -1447,6 +1448,9 @@ figure.mm-quote-card {
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.4);
 }
+footer.mm-footer .mm-footer-cols p {
+  margin-block-start: 0 !important;
+}
 
 /* Block editor helpers (used by patterns) */
 .mm-prose {
@@ -2077,7 +2081,21 @@ body.single-post .entry-content ul li,
 body.single-post .entry-content ol li {
   padding: 0 !important;
 }
-
+.woocommerce-account .woocommerce-MyAccount-navigation {
+  float: left;
+  width: 30%;
+  background: #f6f6f6;
+  padding: 1rem;
+  border-radius: 1rem;
+}
+.woocommerce-account .woocommerce-MyAccount-navigation li {
+  list-style: none;
+  padding: 0.5em 0;
+  border-bottom: 1px solid #e7e7e7;
+}
+.woocommerce-account .woocommerce-MyAccount-navigation li a {
+  text-decoration: none !important;
+}
 @media (min-width: 320px) and (max-width: 960px) {
   .mm-footer {
     background: #111113;
