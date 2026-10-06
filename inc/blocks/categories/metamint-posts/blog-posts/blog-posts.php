@@ -20,14 +20,31 @@ $custom_logo_url = $custom_logo_id ? wp_get_attachment_image_url($custom_logo_id
 
 $featured_ids = [];
 
+$sticky_posts = get_option('sticky_posts');
+$sticky_posts = is_array($sticky_posts) ? array_filter(array_map('absint', $sticky_posts)) : [];
+
 $featured_args = [
-  'posts_per_page' => 1,
-  'post_type' => 'post',
-  'post_status' => 'publish',
+  'posts_per_page'      => 1,
+  'post_type'           => 'post',
+  'post_status'         => 'publish',
   'ignore_sticky_posts' => true,
+  'orderby'             => 'date',
+  'order'               => 'DESC',
 ];
 
-$featured_query = new WP_Query($featured_args);
+if (!empty($sticky_posts)) {
+  $sticky_args = array_merge($featured_args, [
+    'post__in' => $sticky_posts,
+  ]);
+  $featured_query = new WP_Query($sticky_args);
+
+  // Fallback to latest post if no sticky post is published
+  if (!$featured_query->have_posts()) {
+    $featured_query = new WP_Query($featured_args);
+  }
+} else {
+  $featured_query = new WP_Query($featured_args);
+}
 
 if ($featured_query->have_posts()):
   while ($featured_query->have_posts()):
@@ -88,19 +105,37 @@ if ($featured_query->have_posts()):
   endwhile;
   wp_reset_postdata();
 endif;
-?>
 
-<?php
+global $wpdb;
+
+$remaining_stickies = array_values(array_diff($sticky_posts, $featured_ids));
+
 $grid_args = [
-  'posts_per_page' => 6,
-  'paged' => $paged,
-  'post_type' => 'post',
-  'post_status' => 'publish',
-  'post__not_in' => $featured_ids,
+  'posts_per_page'      => 6,
+  'paged'               => $paged,
+  'post_type'           => 'post',
+  'post_status'         => 'publish',
+  'post__not_in'        => $featured_ids,
   'ignore_sticky_posts' => true,
 ];
 
+if (!empty($remaining_stickies)) {
+  $grid_args['sticky_card_priority'] = true;
+  $sticky_orderby = function ($orderby, $query) use ($wpdb, $remaining_stickies) {
+    if ($query->get('sticky_card_priority')) {
+      $ids = implode(',', array_map('absint', $remaining_stickies));
+      return "(CASE WHEN {$wpdb->posts}.ID IN ({$ids}) THEN 0 ELSE 1 END) ASC, {$wpdb->posts}.post_date DESC";
+    }
+    return $orderby;
+  };
+  add_filter('posts_orderby', $sticky_orderby, 10, 2);
+}
+
 $grid_query = new WP_Query($grid_args);
+
+if (!empty($remaining_stickies) && isset($sticky_orderby)) {
+  remove_filter('posts_orderby', $sticky_orderby, 10);
+}
 
 if ($grid_query->have_posts()):
   ?>

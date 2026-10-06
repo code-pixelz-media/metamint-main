@@ -1,4 +1,4 @@
-/* Metamint Apps — design system (shared by front end and block editor) */
+/* Metamint Apps â€” design system (shared by front end and block editor) */
 
 :root {
   --mm-bg: #fafaf9;
@@ -292,7 +292,8 @@ header
   margin-top: 20px;
 }
 
-.mm-btn {
+.mm-btn,
+.slicewp-button-primary {
   display: inline-block;
   border-radius: 999px;
   padding: 14px 28px;
@@ -1098,6 +1099,19 @@ figure.mm-quote-card {
   padding: 0 24px;
   cursor: pointer;
 }
+.slicewp-field-wrapper input[type="email"],
+.slicewp-field-wrapper input[type="password"],
+.slicewp-field-wrapper input[type="text"],
+.slicewp-field-wrapper input[type="url"],
+.slicewp-field-wrapper textarea {
+  flex: 1;
+  border: 1px solid var(--mm-line);
+  border-radius: 6px;
+  background: var(--mm-bg);
+  padding: 10px 18px;
+  font: inherit;
+  font-size: 0.9rem;
+}
 
 /* SEO score demo */
 .mm-score {
@@ -1364,7 +1378,7 @@ figure.mm-quote-card {
   margin-bottom: 8px;
 }
 .mm-rules li::before {
-  content: "— ";
+  content: "â€” ";
 }
 
 /* Footer */
@@ -1611,7 +1625,8 @@ figure.mm-quote-card {
 .wp-block-button__link:hover {
   transform: translateY(-2px);
 }
-.mm-nav-cta .wp-block-button__link {
+.mm-nav-cta .wp-block-button__link,
+.slicewp-button-primary {
   background: var(--mm-ink);
   color: #fff;
   padding: 10px 20px;
