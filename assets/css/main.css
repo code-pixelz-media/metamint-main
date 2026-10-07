@@ -1104,7 +1104,8 @@ figure.mm-quote-card {
 .slicewp-field-wrapper input[type="password"],
 .slicewp-field-wrapper input[type="text"],
 .slicewp-field-wrapper input[type="url"],
-.slicewp-field-wrapper textarea {
+.slicewp-field-wrapper textarea,
+#slicewp-affiliate-custom-link-input {
   flex: 1;
   border: 1px solid var(--mm-line);
   border-radius: 6px;
@@ -1465,6 +1466,16 @@ footer.mm-footer .mm-footer-cols p {
   margin-bottom: 25px;
 }
 
+.woocommerce-account .addresses .title .edit {
+  float: left;
+}
+.woocommerce form .form-row .input-text,
+.woocommerce form .form-row select,
+.woocommerce form fieldset {
+  border: 1px solid #e8e8e4 !important;
+  border-radius: 6px !important;
+}
+
 /* Demo checkout modal */
 .mm-modal {
   position: fixed;
@@ -1635,6 +1646,10 @@ footer.mm-footer .mm-footer-cols p {
   color: #fff;
   padding: 10px 20px;
   font-size: 0.85rem;
+}
+
+form#slicewp-affiliate-lost-password-form {
+  max-width: 100%;
 }
 .mm-nav-cta .wp-block-button__link:hover {
   background: var(--mm-teal);
