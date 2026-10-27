@@ -52,6 +52,33 @@ $hero_inner_text_button_2_link = !empty($hero_group['hero_inner_text_button_2_li
     ? $hero_group['hero_inner_text_button_2_link']
     : (get_field('hero_inner_text_button_2_link') ?: get_field('hero_text_button_2_link'));
 
+// Padding options
+$hero_inner_padding_top = !empty($hero_group['hero_inner_padding_top'])
+    ? $hero_group['hero_inner_padding_top']
+    : (get_field('hero_inner_padding_top', $block['id'] ?? null));
+if ($hero_inner_padding_top === null || $hero_inner_padding_top === '') {
+    $hero_inner_padding_top = get_field('hero_inner_padding_top') ?: ($block['data']['hero_inner_padding_top'] ?? '');
+}
+
+$hero_inner_padding_bottom = !empty($hero_group['hero_inner_padding_bottom'])
+    ? $hero_group['hero_inner_padding_bottom']
+    : (get_field('hero_inner_padding_bottom', $block['id'] ?? null));
+if ($hero_inner_padding_bottom === null || $hero_inner_padding_bottom === '') {
+    $hero_inner_padding_bottom = get_field('hero_inner_padding_bottom') ?: ($block['data']['hero_inner_padding_bottom'] ?? '');
+}
+
+// Format padding helper: appends 'px' if purely numeric, preserves unit if string, empty if unset
+$format_padding = function ($val) {
+    if ($val === null || $val === '') {
+        return '';
+    }
+    $val = trim((string) $val);
+    if ($val === '') {
+        return '';
+    }
+    return is_numeric($val) ? $val . 'px' : $val;
+};
+
 // Styles
 $hero_inner_btn_alignment = !empty($hero_group['hero_inner_btn_alignment'])
     ? $hero_group['hero_inner_btn_alignment']
@@ -64,7 +91,6 @@ $hero_inner_accent_color = !empty($hero_group['hero_inner_accent_color'])
 
 $raw_accent = trim((string) $hero_inner_accent_color);
 $lower_accent = strtolower($raw_accent);
-$custom_hero_style = '';
 
 if ($lower_accent === 'red' || $lower_accent === 'coral' || $lower_accent === '#f05d5e') {
     $color_class = 'color-red color-coral';
@@ -72,10 +98,28 @@ if ($lower_accent === 'red' || $lower_accent === 'coral' || $lower_accent === '#
     $color_class = 'color-green color-teal';
 } elseif (str_starts_with($raw_accent, '#')) {
     $color_class = 'color-custom';
-    $custom_hero_style = ' style="--mm-hero-accent:' . esc_attr($raw_accent) . ';"';
 } else {
     $color_class = 'color-' . sanitize_html_class($lower_accent);
 }
+
+// Build inline styles (custom accent color and custom padding overrides)
+$hero_inline_styles = [];
+
+if (str_starts_with($raw_accent, '#')) {
+    $hero_inline_styles[] = '--mm-hero-accent:' . esc_attr($raw_accent);
+}
+
+$pad_top = $format_padding($hero_inner_padding_top);
+if ($pad_top !== '') {
+    $hero_inline_styles[] = 'padding-top:' . esc_attr($pad_top);
+}
+
+$pad_bottom = $format_padding($hero_inner_padding_bottom);
+if ($pad_bottom !== '') {
+    $hero_inline_styles[] = 'padding-bottom:' . esc_attr($pad_bottom);
+}
+
+$custom_hero_style = !empty($hero_inline_styles) ? ' style="' . implode('; ', $hero_inline_styles) . ';"' : '';
 
 // Normalize Button 1 (handles ACF Link Array or plain URL string)
 $hero_inner_btn1_url = '';

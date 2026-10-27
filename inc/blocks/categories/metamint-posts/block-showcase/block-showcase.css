@@ -68,8 +68,8 @@
 .mm-desktop-screen {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 10;
-  background: #f8f8fa;
+  aspect-ratio: 16 / 9;
+  background: #000000;
   border-radius: 16px;
   overflow: hidden;
   transform: translateZ(0);
@@ -101,7 +101,7 @@
   border: 2px solid #27282e;
   box-shadow:
     0 0 0 1px rgba(13, 14, 17, 0.8),
-    -22px 30px 85px rgba(0, 0, 0, 0.45),
+    0px 0px 17px rgba(0, 0, 0, 0.45),
     -6px 12px 28px rgba(0, 0, 0, 0.25);
   box-sizing: border-box;
 }
@@ -226,14 +226,15 @@
   opacity: 1;
 }
 
-/* Seamless edge-to-edge video display without pixel blur */
+/* Seamless uncropped video display in desktop screen */
+.mm-desktop-screen .mm-slide-video iframe,
 .mm-slide-video iframe {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 114% !important;
-  height: 114% !important;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  transform: none;
   max-width: none !important;
   border: 0;
   display: block;
@@ -243,17 +244,17 @@
   -webkit-backface-visibility: hidden;
 }
 
+.mm-desktop-screen .mm-slide-video video,
 .mm-slide-video video {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: 0;
+  left: 0;
   width: 100% !important;
   height: 100% !important;
   max-width: none !important;
   border: 0;
   display: block;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 /* Ensure mobile screen has zero subpixel hairline gap on right edge */
@@ -274,6 +275,9 @@
 }
 
 .mm-mobile-screen .mm-slide-video iframe {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 122% !important;
   height: 114% !important;
 }
@@ -466,12 +470,13 @@
   }
 
   .mm-showcase-stage {
-    padding-bottom: 45px;
+    padding-bottom: 0;
     padding-right: 0;
   }
 
   .mm-mockup-desktop {
-    width: 88%;
+    width: 100%;
+    margin: 0 auto;
     border-radius: 18px;
     padding: 8px;
   }
@@ -480,50 +485,15 @@
     border-radius: 12px;
   }
 
+  /* Hide mobile mockup frame on mobile view (under 768px) per user request */
   .mm-mockup-mobile {
-    width: 42%;
-    min-width: 180px;
-    bottom: -15px;
-    right: -2%;
-  }
-
-  .mm-mobile-bezel {
-    border-radius: 34px;
-    padding: 8px;
-    border-width: 2px;
-  }
-
-  .mm-mobile-screen {
-    border-radius: 28px;
-  }
-
-  .mm-mobile-notch {
-    width: 58px;
-    height: 14px;
-    top: 12px;
-    padding-right: 7px;
-  }
-
-  .mm-mobile-notch .notch-lens {
-    width: 5px;
-    height: 5px;
-  }
-
-  .mm-mobile-notch .notch-sensor {
-    width: 3px;
-    height: 3px;
-  }
-
-  .mm-mobile-home-indicator {
-    width: 65px;
-    height: 3px;
-    bottom: 10px;
+    display: none !important;
   }
 }
 
 @media (max-width: 480px) {
   .mm-mockup-desktop {
-    width: 92%;
+    width: 100%;
     border-radius: 14px;
     padding: 6px;
   }
@@ -533,19 +503,7 @@
   }
 
   .mm-mockup-mobile {
-    width: 46%;
-    min-width: 155px;
-    bottom: -10px;
-    right: -3%;
-  }
-
-  .mm-mobile-bezel {
-    border-radius: 28px;
-    padding: 6px;
-  }
-
-  .mm-mobile-screen {
-    border-radius: 22px;
+    display: none !important;
   }
 
   .mm-showcase-controls {

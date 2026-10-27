@@ -261,6 +261,13 @@ if (!empty($raw_slides) && is_array($raw_slides)) {
       }
     }
 
+    // Fall back to desktop media for mobile device if separate mobile media is not set
+    if (empty($mobile_type)) {
+      $mobile_type  = $desktop_type;
+      $mobile_img   = $desktop_img;
+      $mobile_vid   = $desktop_vid;
+    }
+
     if (!empty($desktop_type) || !empty($mobile_type)) {
       $slides[] = [
         'desktop_type'  => $desktop_type,
@@ -379,8 +386,8 @@ $custom_class = !empty($block['className']) ? ' ' . $block['className'] : '';
       </div>
     </div>
 
-    <!-- Controls / Navigation Indicators -->
-    <?php if (count($slides) > 1): ?>
+    <!-- Controls / Navigation Indicators (Commented out per user request) -->
+    <?php /* if (count($slides) > 1): ?>
       <div class="mm-showcase-controls" data-showcase-controls>
         <button type="button" class="mm-showcase-nav-btn prev" data-showcase-prev aria-label="Previous slide">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -405,6 +412,6 @@ $custom_class = !empty($block['className']) ? ' ' . $block['className'] : '';
           </svg>
         </button>
       </div>
-    <?php endif; ?>
+    <?php endif; */ ?>
   </div>
 </section>

@@ -22,7 +22,7 @@
       var nextBtn = container.querySelector('[data-showcase-next]');
       var stage = container.querySelector('[data-showcase-stage]');
 
-      var total = Math.min(desktopSlides.length, mobileSlides.length);
+      var total = desktopSlides.length ? desktopSlides.length : mobileSlides.length;
       if (total <= 1) return;
 
       var currentIndex = 0;
@@ -32,8 +32,13 @@
       function slideHasVideo(idx) {
         var dSlide = desktopSlides[idx];
         var mSlide = mobileSlides[idx];
-        var hasD = dSlide && dSlide.querySelector('.mm-slide-video') !== null;
-        var hasM = mSlide && mSlide.querySelector('.mm-slide-video') !== null;
+        var dMockup = dSlide ? dSlide.closest('.mm-mockup-desktop') : null;
+        var mMockup = mSlide ? mSlide.closest('.mm-mockup-mobile') : null;
+        var dVisible = !dMockup || window.getComputedStyle(dMockup).display !== 'none';
+        var mVisible = !mMockup || window.getComputedStyle(mMockup).display !== 'none';
+
+        var hasD = dVisible && dSlide && dSlide.querySelector('.mm-slide-video') !== null;
+        var hasM = mVisible && mSlide && mSlide.querySelector('.mm-slide-video') !== null;
         return hasD || hasM;
       }
 
@@ -64,6 +69,27 @@
         // Ensure active slide video is playing in Full HD and mute inactive slides
         [desktopSlides, mobileSlides].forEach(function (slidesList) {
           slidesList.forEach(function (slide, idx) {
+            // If mockup container is hidden (e.g. mobile mockup on small screens), pause its video
+            var mockup = slide.closest('.mm-mockup-mobile, .mm-mockup-desktop');
+            var isHiddenMockup = mockup && window.getComputedStyle(mockup).display === 'none';
+
+            if (isHiddenMockup) {
+              var hiddenIframe = slide.querySelector('iframe');
+              if (hiddenIframe && hiddenIframe.contentWindow) {
+                try {
+                  hiddenIframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'pauseVideo', args: '' }), '*');
+                  hiddenIframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'mute', args: '' }), '*');
+                } catch (e) {}
+              }
+              var hiddenVideo = slide.querySelector('video');
+              if (hiddenVideo) {
+                try {
+                  hiddenVideo.pause();
+                } catch (e) {}
+              }
+              return;
+            }
+
             var isActive = (idx === currentIndex);
             if (isActive) {
               var iframe = slide.querySelector('iframe');
@@ -287,6 +313,29 @@
           { passive: true }
         );
       }
+
+      // Sync and pause videos in hidden mockups (e.g. mobile mockup on small screens)
+      function syncHiddenVideos() {
+        var mobileMockup = container.querySelector('.mm-mockup-mobile');
+        if (mobileMockup && window.getComputedStyle(mobileMockup).display === 'none') {
+          mobileMockup.querySelectorAll('iframe').forEach(function (iframe) {
+            if (iframe && iframe.contentWindow) {
+              try {
+                iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'pauseVideo', args: '' }), '*');
+                iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'mute', args: '' }), '*');
+              } catch (e) {}
+            }
+          });
+          mobileMockup.querySelectorAll('video').forEach(function (vid) {
+            try {
+              vid.pause();
+            } catch (e) {}
+          });
+        }
+      }
+
+      window.addEventListener('resize', syncHiddenVideos);
+      syncHiddenVideos();
 
       // Start automatic sliding
       startAutoPlay();

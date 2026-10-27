@@ -1905,6 +1905,7 @@ form#slicewp-affiliate-lost-password-form {
 .mobile-menu,
 .wp-block-navigation.mobile-menu {
   position: relative !important;
+  top: 0 !important;
 }
 
 .wp-block-navigation__responsive-container.is-menu-open {
