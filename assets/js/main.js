@@ -236,4 +236,140 @@
         btn.textContent = label;
       });
   });
+
+  /* ==========================================================================
+     Interactive Floating Blobs with Physics & Mouse Movement Parallax
+     ========================================================================== */
+  function initHeroBlobs() {
+    var heroes = document.querySelectorAll(".mm-hero, .block-hero-banner");
+    if (!heroes.length) return;
+
+    var prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReduced) return;
+
+    heroes.forEach(function (hero) {
+      if (hero.dataset.mmBlobsInit === "true") return;
+      hero.dataset.mmBlobsInit = "true";
+
+      var orbTeal = hero.querySelector(".mm-orb-teal");
+      var orbCoral = hero.querySelector(".mm-orb-coral");
+      if (!orbTeal && !orbCoral) return;
+
+      var wrapTeal = (orbTeal && orbTeal.closest(".mm-orb-wrap")) || orbTeal;
+      var wrapCoral = (orbCoral && orbCoral.closest(".mm-orb-wrap")) || orbCoral;
+
+      var currentTealX = 0, currentTealY = 0;
+      var targetTealX = 0, targetTealY = 0;
+      var currentCoralX = 0, currentCoralY = 0;
+      var targetCoralX = 0, targetCoralY = 0;
+      var isRunning = false;
+      var idleTimer = null;
+
+      function renderFrame() {
+        var dTealX = targetTealX - currentTealX;
+        var dTealY = targetTealY - currentTealY;
+        var dCoralX = targetCoralX - currentCoralX;
+        var dCoralY = targetCoralY - currentCoralY;
+
+        // Smooth spring physics lerp
+        currentTealX += dTealX * 0.08;
+        currentTealY += dTealY * 0.08;
+        currentCoralX += dCoralX * 0.08;
+        currentCoralY += dCoralY * 0.08;
+
+        if (wrapTeal) {
+          wrapTeal.style.transform =
+            "translate3d(" + currentTealX.toFixed(2) + "px, " + currentTealY.toFixed(2) + "px, 0)";
+        }
+        if (wrapCoral) {
+          wrapCoral.style.transform =
+            "translate3d(" + currentCoralX.toFixed(2) + "px, " + currentCoralY.toFixed(2) + "px, 0)";
+        }
+
+        var delta =
+          Math.abs(dTealX) +
+          Math.abs(dTealY) +
+          Math.abs(dCoralX) +
+          Math.abs(dCoralY);
+
+        if (delta > 0.05) {
+          requestAnimationFrame(renderFrame);
+        } else {
+          isRunning = false;
+        }
+      }
+
+      function onMouseMove(e) {
+        var rect = hero.getBoundingClientRect();
+        // Ignore if hero is scrolled completely out of view
+        if (rect.bottom < -100 || rect.top > window.innerHeight + 100) return;
+
+        if (idleTimer) clearTimeout(idleTimer);
+
+        // Normalize cursor relative to hero center (-1 to +1)
+        var heroCenterX = rect.left + rect.width / 2;
+        var heroCenterY = rect.top + rect.height / 2;
+        var normX = (e.clientX - heroCenterX) / (window.innerWidth / 2);
+        var normY = (e.clientY - heroCenterY) / (rect.height / 2);
+
+        normX = Math.max(-1, Math.min(1, normX));
+        normY = Math.max(-1, Math.min(1, normY));
+
+        // Green blob (top-left):
+        // Clamped safely so it never approaches the header or bottom boundaries
+        targetTealX = normX * 80;
+        targetTealY = Math.max(-10, Math.min(25, normY * 40));
+
+        // Red blob (mid/bottom-right):
+        // Clamped safely so it stays well clear of the edges
+        targetCoralX = normX * 90;
+        targetCoralY = Math.max(-25, Math.min(25, normY * 40));
+
+        if (!isRunning) {
+          isRunning = true;
+          requestAnimationFrame(renderFrame);
+        }
+
+        // When mouse rests for 2.5s, gently glide back to center so ambient floating blob takes over
+        idleTimer = setTimeout(function () {
+          targetTealX = 0;
+          targetTealY = 0;
+          targetCoralX = 0;
+          targetCoralY = 0;
+          if (!isRunning) {
+            isRunning = true;
+            requestAnimationFrame(renderFrame);
+          }
+        }, 2500);
+      }
+
+      function onMouseLeave() {
+        targetTealX = 0;
+        targetTealY = 0;
+        targetCoralX = 0;
+        targetCoralY = 0;
+        if (!isRunning) {
+          isRunning = true;
+          requestAnimationFrame(renderFrame);
+        }
+      }
+
+      window.addEventListener("mousemove", onMouseMove, { passive: true });
+      document.addEventListener("mouseleave", onMouseLeave, { passive: true });
+    });
+  }
+
+  window.initHeroBlobs = initHeroBlobs;
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initHeroBlobs);
+  } else {
+    initHeroBlobs();
+  }
+
+  if (window.acf) {
+    window.acf.addAction("render_block_preview", function () {
+      initHeroBlobs();
+    });
+  }
 })();

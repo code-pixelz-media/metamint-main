@@ -1,0 +1,554 @@
+/**
+ * Metamint Block Showcase Styles
+ * Dual device mockup (Desktop browser + Mobile phone) with synchronized transitions
+ */
+
+.block-showcase-section {
+  position: relative;
+  overflow: hidden;
+  padding: 80px 0 100px;
+}
+
+.mm-showcase-header {
+  text-align: center;
+  max-width: 740px;
+  margin: 0 auto 52px;
+}
+
+.mm-showcase-header .mm-eyebrow {
+  margin-bottom: 8px;
+}
+
+.mm-showcase-header .mm-h2 {
+  margin: 0 0 16px;
+}
+
+.mm-showcase-header .mm-lede {
+  margin: 0 auto;
+}
+
+/* ==========================================================================
+   Showcase Stage & Device Layout (Dual Device Mockup)
+   ========================================================================== */
+
+.mm-showcase-stage {
+  position: relative;
+  max-width: 1140px;
+  margin: 0 auto;
+  padding-bottom: 50px;
+  padding-right: 24px;
+}
+
+/* Desktop Mockup (Background Window / Screen) */
+.mm-mockup-desktop {
+  position: relative;
+  width: 85%;
+  margin-left: 0;
+  margin-right: auto;
+  background: #18191d;
+  border-radius: 26px;
+  padding: 12px;
+  box-shadow:
+    0 40px 100px -25px rgba(0, 0, 0, 0.28),
+    0 20px 45px -15px rgba(0, 0, 0, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-sizing: border-box;
+  z-index: 1;
+  transition:
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.5s ease;
+}
+
+.mm-mockup-desktop:hover {
+  box-shadow:
+    0 50px 110px -20px rgba(0, 0, 0, 0.32),
+    0 25px 50px -12px rgba(0, 0, 0, 0.18);
+}
+
+.mm-desktop-screen {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  background: #f8f8fa;
+  border-radius: 16px;
+  overflow: hidden;
+  transform: translateZ(0);
+}
+
+/* Mobile Mockup (Foreground Overlapping) */
+.mm-mockup-mobile {
+  position: absolute;
+  right: 0;
+  bottom: -35px;
+  width: 30%;
+  min-width: 220px;
+  max-width: 310px;
+  z-index: 10;
+  transition:
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.4s ease;
+}
+
+.mm-mockup-mobile:hover {
+  transform: translateY(-6px);
+}
+
+.mm-mobile-bezel {
+  position: relative;
+  background: #0d0e11;
+  border-radius: 46px;
+  padding: 11px;
+  border: 2px solid #27282e;
+  box-shadow:
+    0 0 0 1px rgba(13, 14, 17, 0.8),
+    -22px 30px 85px rgba(0, 0, 0, 0.45),
+    -6px 12px 28px rgba(0, 0, 0, 0.25);
+  box-sizing: border-box;
+}
+
+.mm-mobile-notch {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 78px;
+  height: 18px;
+  background: #000000;
+  border-radius: 12px;
+  z-index: 25;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 10px;
+  gap: 5px;
+  box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.15);
+}
+
+.mm-mobile-notch .notch-lens {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #1c1c1e;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mm-mobile-notch .notch-sensor {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #0e1a2f;
+}
+
+.mm-mobile-screen {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 9 / 19.5;
+  background: #000000;
+  border-radius: 38px;
+  overflow: hidden;
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  mask-image: -webkit-radial-gradient(white, black);
+  isolation: isolate;
+  transform: translateZ(0);
+}
+
+.mm-mobile-home-indicator {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 4px;
+  z-index: 25;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   Synchronized Sliding Tracks & Transitions
+   ========================================================================== */
+
+.mm-slides-track {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.mm-slide {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.mm-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+  transform: scale(1.05);
+  opacity: 0.88;
+  transition:
+    transform 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.5s ease;
+}
+
+.mm-slide.is-active img {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.mm-slide-media {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.mm-slide-video {
+  background: #000000;
+  opacity: 0.88;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  transition: opacity 0.5s ease;
+}
+
+.mm-slide.is-active .mm-slide-video {
+  opacity: 1;
+}
+
+/* Seamless edge-to-edge video display without pixel blur */
+.mm-slide-video iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 114% !important;
+  height: 114% !important;
+  max-width: none !important;
+  border: 0;
+  display: block;
+  pointer-events: none;
+  image-rendering: -webkit-optimize-contrast;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.mm-slide-video video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  border: 0;
+  display: block;
+  object-fit: cover;
+}
+
+/* Ensure mobile screen has zero subpixel hairline gap on right edge */
+.mm-mobile-screen .mm-slide img {
+  width: calc(100% + 2px);
+  min-width: calc(100% + 2px);
+  height: 100%;
+  margin-right: -2px;
+  object-fit: cover;
+}
+
+.mm-mobile-screen .mm-slide-media,
+.mm-mobile-screen .mm-slide-video {
+  width: calc(100% + 2px);
+  min-width: calc(100% + 2px);
+  height: 100%;
+  margin-right: -2px;
+}
+
+.mm-mobile-screen .mm-slide-video iframe {
+  width: 122% !important;
+  height: 114% !important;
+}
+
+/* Invisible shield layer prevents user clicks or hover from ever interacting with YouTube */
+.mm-video-shield {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  background: transparent;
+  pointer-events: auto;
+  cursor: default;
+}
+
+.mm-slide-video .wp-block-embed,
+.mm-slide-video .wp-block-embed__wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Sound Toggle Button (Bottom Left of Video Mockup) */
+.mm-video-sound-toggle {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  z-index: 10;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(18, 19, 23, 0.78);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  outline: none;
+}
+
+.mm-video-sound-toggle:hover {
+  background: rgba(18, 19, 23, 0.95);
+  transform: scale(1.08);
+  border-color: rgba(255, 255, 255, 0.45);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+}
+
+.mm-video-sound-toggle:active {
+  transform: scale(0.96);
+}
+
+.mm-video-sound-toggle .mm-sound-icon {
+  stroke: #ffffff;
+  pointer-events: none;
+  display: block;
+  transition: transform 0.2s ease;
+}
+
+/* Initially muted: display muted icon */
+.mm-video-sound-toggle .mm-icon-unmuted {
+  display: none !important;
+}
+
+.mm-video-sound-toggle .mm-icon-muted {
+  display: block !important;
+}
+
+/* Once clicked (unmuted): display unmuted speaker icon */
+.mm-video-sound-toggle.is-unmuted {
+  background: rgba(15, 113, 115, 0.85);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.mm-video-sound-toggle.is-unmuted:hover {
+  background: rgba(15, 113, 115, 1);
+}
+
+.mm-video-sound-toggle.is-unmuted .mm-icon-unmuted {
+  display: block !important;
+}
+
+.mm-video-sound-toggle.is-unmuted .mm-icon-muted {
+  display: none !important;
+}
+
+/* Mobile mockup sizing */
+.mm-mockup-mobile .mm-video-sound-toggle {
+  bottom: 14px;
+  left: 14px;
+  width: 32px;
+  height: 32px;
+}
+
+/* ==========================================================================
+   Controls & Indicators
+   ========================================================================== */
+
+.mm-showcase-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 40px;
+}
+
+.mm-showcase-nav-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid var(--mm-line, #e5e7eb);
+  color: var(--mm-ink, #18181b);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+.mm-showcase-nav-btn:hover {
+  background: #18181b;
+  color: #ffffff;
+  border-color: #18181b;
+  transform: scale(1.08);
+}
+
+.mm-showcase-dots {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mm-dot-indicator {
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border-radius: 20px;
+  background: #e4e4e7;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition:
+    width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    background 0.25s ease;
+}
+
+.mm-dot-indicator:hover {
+  background: #a1a1aa;
+}
+
+.mm-dot-indicator.is-active {
+  width: 32px;
+  background: var(--mm-ink, #18181b);
+}
+
+/* ==========================================================================
+   Responsive Breakpoints
+   ========================================================================== */
+
+@media (max-width: 991px) {
+  .mm-showcase-stage {
+    padding-right: 12px;
+  }
+
+  .mm-mockup-desktop {
+    width: 82%;
+  }
+
+  .mm-mockup-mobile {
+    width: 33%;
+    bottom: -25px;
+  }
+}
+
+@media (max-width: 767px) {
+  .block-showcase-section {
+    padding: 60px 0 80px;
+  }
+
+  .mm-showcase-stage {
+    padding-bottom: 45px;
+    padding-right: 0;
+  }
+
+  .mm-mockup-desktop {
+    width: 88%;
+    border-radius: 18px;
+    padding: 8px;
+  }
+
+  .mm-desktop-screen {
+    border-radius: 12px;
+  }
+
+  .mm-mockup-mobile {
+    width: 42%;
+    min-width: 180px;
+    bottom: -15px;
+    right: -2%;
+  }
+
+  .mm-mobile-bezel {
+    border-radius: 34px;
+    padding: 8px;
+    border-width: 2px;
+  }
+
+  .mm-mobile-screen {
+    border-radius: 28px;
+  }
+
+  .mm-mobile-notch {
+    width: 58px;
+    height: 14px;
+    top: 12px;
+    padding-right: 7px;
+  }
+
+  .mm-mobile-notch .notch-lens {
+    width: 5px;
+    height: 5px;
+  }
+
+  .mm-mobile-notch .notch-sensor {
+    width: 3px;
+    height: 3px;
+  }
+
+  .mm-mobile-home-indicator {
+    width: 65px;
+    height: 3px;
+    bottom: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .mm-mockup-desktop {
+    width: 92%;
+    border-radius: 14px;
+    padding: 6px;
+  }
+
+  .mm-desktop-screen {
+    border-radius: 10px;
+  }
+
+  .mm-mockup-mobile {
+    width: 46%;
+    min-width: 155px;
+    bottom: -10px;
+    right: -3%;
+  }
+
+  .mm-mobile-bezel {
+    border-radius: 28px;
+    padding: 6px;
+  }
+
+  .mm-mobile-screen {
+    border-radius: 22px;
+  }
+
+  .mm-showcase-controls {
+    margin-top: 30px;
+  }
+}

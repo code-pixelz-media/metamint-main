@@ -115,6 +115,50 @@ if (is_array($hero_inner_button_2_label)) {
     $hero_inner_button_2_label = $hero_inner_button_2_label['title'] ?? '';
 }
 
+// Features Repeater from group: hero_inner_features -> repeater: hero_inner_feature_list
+$hero_features_group = !empty($hero_group['hero_inner_features'])
+    ? $hero_group['hero_inner_features']
+    : (get_field('hero_inner_features') ?: []);
+
+$hero_features_list = [];
+if (!empty($hero_features_group['hero_inner_feature_list']) && is_array($hero_features_group['hero_inner_feature_list'])) {
+    $hero_features_list = $hero_features_group['hero_inner_feature_list'];
+} elseif (is_array(get_field('hero_inner_feature_list'))) {
+    $hero_features_list = get_field('hero_inner_feature_list');
+}
+
+// Fallback to block data for preview if get_field is empty
+if (empty($hero_features_list) && !empty($block['data'])) {
+    $block_data = $block['data'];
+    $repeater_count = 0;
+    $prefix = '';
+
+    if (!empty($block_data['hero_inner_features_hero_inner_feature_list'])) {
+        $repeater_count = (int) $block_data['hero_inner_features_hero_inner_feature_list'];
+        $prefix = 'hero_inner_features_hero_inner_feature_list';
+    } elseif (!empty($block_data['hero_inner_feature_list'])) {
+        $repeater_count = (int) $block_data['hero_inner_feature_list'];
+        $prefix = 'hero_inner_feature_list';
+    }
+
+    if ($repeater_count > 0) {
+        for ($i = 0; $i < $repeater_count; $i++) {
+            $item_title = $block_data["{$prefix}_{$i}_hero_inner_feature_title"] ?? '';
+            $item_desc  = $block_data["{$prefix}_{$i}_hero_inner_feature_description"] ?? '';
+            if ($item_title !== '' || $item_desc !== '') {
+                $hero_features_list[] = [
+                    'hero_inner_feature_title'       => $item_title,
+                    'hero_inner_feature_description' => $item_desc,
+                ];
+            }
+        }
+    }
+}
+
+// Determine column count based on repeater count (1, 2, 3, or up to 4 columns)
+$feature_count = (!empty($hero_features_list) && is_array($hero_features_list)) ? count($hero_features_list) : 0;
+$feature_cols  = min(max($feature_count, 1), 4);
+
 // Define allowed HTML tags: <br> and <i> (for safe output using wp_kses)
 $allowed_html_tags = [
     'br' => [], // Allows <br>, <br/>, or <br /> tags
@@ -124,8 +168,8 @@ $allowed_html_tags = [
 <section id="home-hero"
     class="custom-block block-hero-banner hero-inner mm-hero mm-dots <?= esc_attr($color_class) ?> <?= esc_attr($alignment_class) ?>"
     <?= $custom_hero_style ?>>
-    <div class="mm-orb mm-orb-teal" aria-hidden="true"></div>
-    <div class="mm-orb mm-orb-coral" aria-hidden="true"></div>
+    <div class="mm-orb-wrap mm-orb-wrap-teal" aria-hidden="true"><div class="mm-orb mm-orb-teal"></div></div>
+    <div class="mm-orb-wrap mm-orb-wrap-coral" aria-hidden="true"><div class="mm-orb mm-orb-coral"></div></div>
     <div class="mm-wrap mm-hero-inner">
         <?php if (!empty($hero_inner_capsule_text)): ?>
             <span class="mm-pill" data-testid="hero-badge-studio">
@@ -168,4 +212,28 @@ $allowed_html_tags = [
             </div>
         <?php endif; ?>
     </div>
+
+    <?php if (!empty($hero_features_list) && is_array($hero_features_list)): ?>
+        <div class="mm-wrap mm-hero-inner mm-hero-features-wrap">
+            <div class="mm-hero-features-grid cols-<?= esc_attr($feature_cols); ?>" style="--hero-features-cols: <?= esc_attr($feature_cols); ?>;">
+                <?php foreach ($hero_features_list as $index => $item):
+                    $item_title = !empty($item['hero_inner_feature_title']) ? $item['hero_inner_feature_title'] : '';
+                    $item_desc  = !empty($item['hero_inner_feature_description']) ? $item['hero_inner_feature_description'] : '';
+                    if ($item_title === '' && $item_desc === '') {
+                        continue;
+                    }
+                    $card_slug = !empty($item_title) ? sanitize_title($item_title) : ('feature-' . ($index + 1));
+                    ?>
+                    <div class="mm-card mm-feature mm-hero-feature-card" data-testid="hero-feature-<?= esc_attr($card_slug); ?>">
+                        <?php if (!empty($item_title)): ?>
+                            <h3 class="mm-h4"><?php echo wp_kses($item_title, $allowed_html_tags); ?></h3>
+                        <?php endif; ?>
+                        <?php if (!empty($item_desc)): ?>
+                            <p class="mm-muted"><?php echo wp_kses_post($item_desc); ?></p>
+                        <?php endif; ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    <?php endif; ?>
 </section>

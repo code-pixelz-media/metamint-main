@@ -70,7 +70,6 @@ body.page-template-full-width :where(.wp-site-blocks) > * {
   border-bottom: 1px solid var(--mm-line);
 }
 .mm-wash2 {
-  background: var(--mm-wash);
   border-top: 1px solid var(--mm-line);
   border-bottom: 1px solid var(--mm-line);
 }
@@ -367,13 +366,22 @@ header
 }
 
 /* Nav */
-.mm-nav-wrap {
-  position: sticky;
-  top: 16px;
+header.wp-block-template-part {
+  width: 100%;
+  max-width: 1152px;
+  margin: 0 auto;
+}
+body.admin-bar .mm-nav-wrap {
+  position: fixed;
   z-index: 50;
-  max-width: 1024px;
+  top: 32px;
+  width: 1152px;
+  max-width: 100%;
   margin: 16px auto 0;
-  padding: 0 16px;
+  padding: 0;
+}
+body:not(.admin-bar) .mm-nav-wrap {
+  top: 16px;
 }
 .mm-nav {
   display: flex;
@@ -434,6 +442,7 @@ header
 .mm-hero-inner {
   position: relative;
   text-align: center;
+  z-index: 2;
 }
 .mm-hero-product {
   background: #fff;
@@ -468,30 +477,139 @@ header
     );
     background-size: 26px 26px;
   }
-  .mm-orb {
+  /* Hero Animated Background Orbs / Moving Blobs (Compact Ambient Ovals) */
+  .mm-orb-wrap {
     position: absolute;
-    border-radius: 50%;
-    filter: blur(70px);
     pointer-events: none;
-    width: 320px;
-    height: 320px;
+    user-select: none;
+    z-index: 1;
+    will-change: transform;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
+
+  .mm-orb-wrap-teal {
+    top: 110px;
+    left: 4%;
+    width: clamp(340px, 32vw, 460px);
+    height: clamp(190px, 18vw, 250px);
+  }
+
+  .mm-orb-wrap-coral {
+    top: 170px;
+    right: 4%;
+    width: clamp(340px, 32vw, 460px);
+    height: clamp(190px, 18vw, 250px);
+  }
+
+  .mm-orb {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    filter: blur(50px);
+    pointer-events: none;
+    user-select: none;
+    will-change: border-radius, transform;
+  }
+
   .mm-orb-teal {
-    background: rgba(15, 113, 115, 0.13);
-    top: 40px;
-    left: 10%;
+    background: radial-gradient(
+      ellipse at 50% 50%,
+      rgba(20, 184, 166, 0.4) 0%,
+      rgba(20, 184, 166, 0.22) 35%,
+      rgba(20, 184, 166, 0.06) 55%,
+      rgba(20, 184, 166, 0) 72%
+    );
+    animation: mm-blob-wander-teal 28s cubic-bezier(0.42, 0, 0.58, 1) infinite;
   }
+
   .mm-orb-coral {
-    background: rgba(240, 93, 94, 0.11);
-    top: 160px;
-    right: 8%;
+    background: radial-gradient(
+      ellipse at 50% 50%,
+      rgba(251, 113, 133, 0.4) 0%,
+      rgba(240, 93, 94, 0.2) 35%,
+      rgba(240, 93, 94, 0.05) 55%,
+      rgba(240, 93, 94, 0) 72%
+    );
+    animation: mm-blob-wander-coral 34s cubic-bezier(0.42, 0, 0.58, 1) infinite;
   }
+
   .mm-hero-product .mm-orb {
     right: 5%;
     left: auto;
     top: -40px;
     width: 380px;
     height: 380px;
+  }
+
+  @keyframes mm-blob-wander-teal {
+    0% {
+      border-radius: 55% 45% 60% 40% / 42% 44% 56% 58%;
+      transform: translate3d(0px, 0px, 0) rotate(0deg) scale(1);
+    }
+    16% {
+      border-radius: 60% 40% 48% 52% / 46% 40% 60% 54%;
+      transform: translate3d(25px, 10px, 0) rotate(12deg) scale(1.03);
+    }
+    33% {
+      border-radius: 48% 52% 58% 42% / 40% 46% 54% 60%;
+      transform: translate3d(45px, 5px, 0) rotate(22deg) scale(0.97);
+    }
+    50% {
+      border-radius: 54% 46% 42% 58% / 44% 42% 58% 56%;
+      transform: translate3d(30px, 18px, 0) rotate(12deg) scale(1.02);
+    }
+    66% {
+      border-radius: 62% 38% 52% 48% / 38% 48% 52% 62%;
+      transform: translate3d(8px, 20px, 0) rotate(-8deg) scale(0.98);
+    }
+    83% {
+      border-radius: 50% 50% 44% 56% / 46% 38% 62% 54%;
+      transform: translate3d(-15px, 10px, 0) rotate(-16deg) scale(1.02);
+    }
+    100% {
+      border-radius: 55% 45% 60% 40% / 42% 44% 56% 58%;
+      transform: translate3d(0px, 0px, 0) rotate(0deg) scale(1);
+    }
+  }
+
+  @keyframes mm-blob-wander-coral {
+    0% {
+      border-radius: 50% 50% 42% 58% / 44% 44% 56% 56%;
+      transform: translate3d(0px, 0px, 0) rotate(0deg) scale(1);
+    }
+    16% {
+      border-radius: 46% 54% 56% 44% / 45% 50% 50% 55%;
+      transform: translate3d(-25px, 10px, 0) rotate(-14deg) scale(1.03);
+    }
+    33% {
+      border-radius: 58% 42% 45% 55% / 50% 40% 60% 50%;
+      transform: translate3d(-45px, 0px, 0) rotate(-24deg) scale(0.97);
+    }
+    50% {
+      border-radius: 44% 56% 50% 50% / 40% 46% 54% 60%;
+      transform: translate3d(-30px, -12px, 0) rotate(-12deg) scale(1.02);
+    }
+    66% {
+      border-radius: 56% 44% 42% 58% / 46% 42% 58% 54%;
+      transform: translate3d(-8px, -18px, 0) rotate(10deg) scale(0.98);
+    }
+    83% {
+      border-radius: 48% 52% 54% 46% / 42% 46% 54% 58%;
+      transform: translate3d(15px, -8px, 0) rotate(18deg) scale(1.02);
+    }
+    100% {
+      border-radius: 50% 50% 42% 58% / 44% 44% 56% 56%;
+      transform: translate3d(0px, 0px, 0) rotate(0deg) scale(1);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mm-orb-teal,
+    .mm-orb-coral {
+      animation: none !important;
+      transition: none !important;
+    }
   }
 
   /* Marquee */

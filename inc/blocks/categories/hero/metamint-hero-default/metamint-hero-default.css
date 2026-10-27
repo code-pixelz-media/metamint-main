@@ -71,6 +71,14 @@
    Accent Color Classes
    ========================================================================== */
 
+/* Base Pill using Accent Color with 1px solid border */
+.block-hero-banner .mm-pill {
+  background: rgba(15, 113, 115, 0.1);
+  color: var(--mm-hero-accent, #0f7173);
+  border: 1px solid var(--mm-hero-accent, #0f7173);
+  box-sizing: border-box;
+}
+
 /* Teal (Default) */
 .block-hero-banner.color-teal {
   --mm-hero-accent: var(--mm-teal, #0f7173);
@@ -79,6 +87,7 @@
 .block-hero-banner.color-teal .mm-pill {
   background: rgba(15, 113, 115, 0.1);
   color: var(--mm-teal, #0f7173);
+  border: 1px solid var(--mm-teal, #0f7173);
 }
 
 .block-hero-banner.color-teal .mm-btn-ink:hover {
@@ -98,6 +107,7 @@
 .block-hero-banner.color-coral .mm-pill {
   background: rgba(240, 93, 94, 0.1);
   color: var(--mm-coral, #f05d5e);
+  border: 1px solid var(--mm-coral, #f05d5e);
 }
 
 .block-hero-banner.color-coral .mm-btn-ink:hover {
@@ -109,9 +119,6 @@
   color: var(--mm-coral, #f05d5e);
 }
 
-.block-hero-banner.color-coral .mm-orb-teal {
-  background: rgba(240, 93, 94, 0.15);
-}
 
 /* Tan */
 .block-hero-banner.color-tan {
@@ -121,6 +128,7 @@
 .block-hero-banner.color-tan .mm-pill {
   background: rgba(216, 164, 127, 0.18);
   color: #8a6242;
+  border: 1px solid var(--mm-tan, #d8a47f);
 }
 
 .block-hero-banner.color-tan .mm-btn-ink:hover {
@@ -140,6 +148,7 @@
 .block-hero-banner.color-purple .mm-pill {
   background: rgba(124, 58, 237, 0.1);
   color: #7c3aed;
+  border: 1px solid #7c3aed;
 }
 
 .block-hero-banner.color-purple .mm-btn-ink:hover {
@@ -152,7 +161,7 @@
 }
 
 .block-hero-banner.color-purple .mm-orb-teal {
-  background: rgba(124, 58, 237, 0.13);
+  background: radial-gradient(ellipse at 50% 50%, rgba(124, 58, 237, 0.40) 0%, rgba(147, 51, 234, 0.24) 40%, rgba(124, 58, 237, 0) 85%);
 }
 
 /* Blue */
@@ -163,6 +172,7 @@
 .block-hero-banner.color-blue .mm-pill {
   background: rgba(37, 99, 235, 0.1);
   color: #2563eb;
+  border: 1px solid #2563eb;
 }
 
 .block-hero-banner.color-blue .mm-btn-ink:hover {
@@ -175,7 +185,7 @@
 }
 
 .block-hero-banner.color-blue .mm-orb-teal {
-  background: rgba(37, 99, 235, 0.13);
+  background: radial-gradient(ellipse at 50% 50%, rgba(37, 99, 235, 0.40) 0%, rgba(59, 130, 246, 0.24) 40%, rgba(37, 99, 235, 0) 85%);
 }
 
 /* Ink / Dark */
@@ -188,6 +198,7 @@
 .block-hero-banner.color-dark .mm-pill {
   background: rgba(24, 24, 27, 0.08);
   color: var(--mm-ink, #18181b);
+  border: 1px solid var(--mm-ink, #18181b);
 }
 
 .block-hero-banner.color-ink .mm-btn-ink:hover,

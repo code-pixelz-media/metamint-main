@@ -28,7 +28,20 @@ $hero_text_button_2_link = get_field('hero_text_button_2_link');
 $hero_btn_alignment = get_field('hero_btn_alignment') ?: 'Left';
 $alignment_class = 'align-' . strtolower($hero_btn_alignment);
 $hero_accent_color = get_field('hero_accent_color') ?: 'Teal';
-$color_class = 'color-' . strtolower($hero_accent_color);
+$raw_accent = trim((string) $hero_accent_color);
+$lower_accent = strtolower($raw_accent);
+$custom_hero_style = '';
+
+if ($lower_accent === 'red' || $lower_accent === 'coral' || $lower_accent === '#f05d5e') {
+    $color_class = 'color-red color-coral';
+} elseif ($lower_accent === 'green' || $lower_accent === 'teal' || $lower_accent === '#0f7173') {
+    $color_class = 'color-green color-teal';
+} elseif (str_starts_with($raw_accent, '#')) {
+    $color_class = 'color-custom';
+    $custom_hero_style = ' style="--mm-hero-accent:' . esc_attr($raw_accent) . ';"';
+} else {
+    $color_class = 'color-' . sanitize_html_class($lower_accent);
+}
 
 // Normalize Button 1 (handles ACF Link Array or plain URL string)
 $hero_btn1_url = '';
@@ -75,12 +88,13 @@ $allowed_html_tags = [
 ];
 ?>
 <section id="home-hero"
-    class="custom-block block-hero-banner mm-hero mm-dots <?= esc_attr($color_class) ?> <?= esc_attr($alignment_class) ?>">
-    <div class="mm-orb mm-orb-teal" aria-hidden="true"></div>
-    <div class="mm-orb mm-orb-coral" aria-hidden="true"></div>
+    class="custom-block block-hero-banner mm-hero mm-dots <?= esc_attr($color_class) ?> <?= esc_attr($alignment_class) ?>"
+    <?= $custom_hero_style ?>>
+    <div class="mm-orb-wrap mm-orb-wrap-teal" aria-hidden="true"><div class="mm-orb mm-orb-teal"></div></div>
+    <div class="mm-orb-wrap mm-orb-wrap-coral" aria-hidden="true"><div class="mm-orb mm-orb-coral"></div></div>
     <div class="mm-wrap mm-hero-inner">
         <?php if (!empty($hero_capsule_text)): ?>
-            <span class="mm-pill mm-pill-teal" data-testid="hero-badge-studio">
+            <span class="mm-pill" data-testid="hero-badge-studio">
                 <?php echo wp_kses($hero_capsule_text, $allowed_html_tags); ?>
             </span>
         <?php endif; ?>
@@ -100,6 +114,13 @@ $allowed_html_tags = [
         <?php if (!empty($hero_main_subtitle)): ?>
             <p class="mm-lede">
                 <?php echo wp_kses($hero_main_subtitle, $allowed_html_tags); ?>
+            </p>
+        <?php endif; ?>
+
+
+        <?php if (!empty($hero_description)): ?>
+            <p class="mm-description">
+                <?php echo wp_kses($hero_description, $allowed_html_tags); ?>
             </p>
         <?php endif; ?>
 

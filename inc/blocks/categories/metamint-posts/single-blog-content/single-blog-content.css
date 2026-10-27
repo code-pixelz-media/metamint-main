@@ -266,7 +266,7 @@
 /* Left Column: Table of Contents */
 .mm-single-sidebar {
   position: sticky;
-  top: 96px;
+  top: 120px;
   z-index: 10;
 }
 
@@ -563,8 +563,14 @@
   color: var(--mm-teal, #0f7173);
 }
 
-.mm-keep-reading-section .blog-card:hover .blog-thumbnail-fallback .mm-thumbnail-logo,
-.mm-keep-reading-section .blog-card:hover .blog-thumbnail-fallback .mm-thumbnail-brand {
+.mm-keep-reading-section
+  .blog-card:hover
+  .blog-thumbnail-fallback
+  .mm-thumbnail-logo,
+.mm-keep-reading-section
+  .blog-card:hover
+  .blog-thumbnail-fallback
+  .mm-thumbnail-brand {
   transform: scale(1.05);
 }
 

@@ -18,37 +18,37 @@ $block_data = $block['data'] ?? [];
 // Fetch fields safely (supports root-level fields and optional cta_inner_content / inner_content group)
 $cta_group = get_field('cta_inner_content', $block['id'] ?? null)
   ?: (get_field('inner_content', $block['id'] ?? null)
-  ?: (get_field('cta_inner_content') ?: (get_field('inner_content') ?: [])));
+    ?: (get_field('cta_inner_content') ?: (get_field('inner_content') ?: [])));
 
 $cta_main_title_1 = !empty($block_data['cta_main_title_1'])
   ? $block_data['cta_main_title_1']
   : (!empty($cta_group['cta_main_title_1'])
-  ? $cta_group['cta_main_title_1']
-  : (get_field('cta_main_title_1', $block['id'] ?? null) ?: (get_field('cta_main_title_1') ?: '')));
+    ? $cta_group['cta_main_title_1']
+    : (get_field('cta_main_title_1', $block['id'] ?? null) ?: (get_field('cta_main_title_1') ?: '')));
 
 $cta_title_main_color_text = !empty($block_data['cta_title_main_color_text'])
   ? $block_data['cta_title_main_color_text']
   : (!empty($cta_group['cta_title_main_color_text'])
-  ? $cta_group['cta_title_main_color_text']
-  : (get_field('cta_title_main_color_text', $block['id'] ?? null) ?: (get_field('cta_title_main_color_text') ?: '')));
+    ? $cta_group['cta_title_main_color_text']
+    : (get_field('cta_title_main_color_text', $block['id'] ?? null) ?: (get_field('cta_title_main_color_text') ?: '')));
 
 $cta_description = !empty($block_data['cta_description'])
   ? $block_data['cta_description']
   : (!empty($cta_group['cta_description'])
-  ? $cta_group['cta_description']
-  : (get_field('cta_description', $block['id'] ?? null) ?: (get_field('cta_description') ?: '')));
+    ? $cta_group['cta_description']
+    : (get_field('cta_description', $block['id'] ?? null) ?: (get_field('cta_description') ?: '')));
 
 $cta_button_1_label = !empty($block_data['cta_button_1_label'])
   ? $block_data['cta_button_1_label']
   : (!empty($cta_group['cta_button_1_label'])
-  ? $cta_group['cta_button_1_label']
-  : (get_field('cta_button_1_label', $block['id'] ?? null) ?: (get_field('cta_button_1_label') ?: '')));
+    ? $cta_group['cta_button_1_label']
+    : (get_field('cta_button_1_label', $block['id'] ?? null) ?: (get_field('cta_button_1_label') ?: '')));
 
 $cta_text_button_1_link = !empty($block_data['cta_text_button_1_link'])
   ? $block_data['cta_text_button_1_link']
   : (!empty($cta_group['cta_text_button_1_link'])
-  ? $cta_group['cta_text_button_1_link']
-  : (get_field('cta_text_button_1_link', $block['id'] ?? null) ?: (get_field('cta_text_button_1_link') ?: '')));
+    ? $cta_group['cta_text_button_1_link']
+    : (get_field('cta_text_button_1_link', $block['id'] ?? null) ?: (get_field('cta_text_button_1_link') ?: '')));
 
 // Fetch Background Color (cta_background_color)
 $cta_background_color = '';
@@ -70,7 +70,7 @@ if (!empty($block_data['cta_background_color'])) {
   if (empty($cta_background_color)) {
     $cta_style = get_field('cta_style', $block['id'] ?? null)
       ?: (get_field('cta_style')
-      ?: (get_field('style', $block['id'] ?? null) ?: (get_field('style') ?: [])));
+        ?: (get_field('style', $block['id'] ?? null) ?: (get_field('style') ?: [])));
     if (!empty($cta_style['cta_background_color'])) {
       $cta_background_color = $cta_style['cta_background_color'];
     }
@@ -91,30 +91,30 @@ if (!empty($cta_bg_clean)) {
 $parse_link = function ($val) {
   if (is_array($val)) {
     return [
-      'url'    => !empty($val['url']) ? $val['url'] : '',
+      'url' => !empty($val['url']) ? $val['url'] : '',
       'target' => !empty($val['target']) ? ' target="' . esc_attr($val['target']) . '" rel="noopener noreferrer"' : '',
     ];
   }
   if (is_string($val) && trim($val) !== '') {
     return [
-      'url'    => trim($val),
+      'url' => trim($val),
       'target' => '',
     ];
   }
   return [
-    'url'    => '',
+    'url' => '',
     'target' => '',
   ];
 };
 
 $button_data = $parse_link($cta_text_button_1_link);
-$btn_url     = $button_data['url'];
-$btn_target  = $button_data['target'];
+$btn_url = $button_data['url'];
+$btn_target = $button_data['target'];
 ?>
-<section class="mm-section"<?= $section_style; ?> data-testid="home-cta">
+<section class="mm-section" <?= $section_style; ?> data-testid="home-cta">
   <div class="mm-wrap">
     <div class="mm-cta-dark mm-dots">
-      <div class="mm-orb mm-orb-teal" aria-hidden="true"></div>
+
 
       <?php if (!empty($cta_main_title_1) || !empty($cta_title_main_color_text)): ?>
         <h2>
@@ -130,7 +130,8 @@ $btn_target  = $button_data['target'];
       <?php endif; ?>
 
       <?php if (!empty($cta_button_1_label)): ?>
-        <a class="mm-btn mm-btn-light" href="<?php echo esc_url($btn_url ?: '#'); ?>"<?php echo $btn_target; ?> data-testid="cta-contact-button">
+        <a class="mm-btn mm-btn-light" href="<?php echo esc_url($btn_url ?: '#'); ?>" <?php echo $btn_target; ?>
+          data-testid="cta-contact-button">
           <?php echo esc_html($cta_button_1_label); ?>
         </a>
       <?php endif; ?>
