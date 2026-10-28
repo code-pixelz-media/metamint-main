@@ -1,0 +1,554 @@
+/* =======================================
+   * 1. Mega Menu Container Styling & Hiding (Existing)
+   * ======================================= */
+.mm-nav-wrap,
+.desktop-menu,
+header.wp-block-template-part {
+  position: relative;
+  max-width: 1152px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.header-wrapper {
+  position: static;
+}
+
+.mega-content-group.metamint-is-visible {
+  display: block;
+  opacity: 1;
+  transform: translate(-50%, 0) scale(1);
+  pointer-events: auto;
+  animation: mmMegaDropdownIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@starting-style {
+  .mega-content-group.metamint-is-visible {
+    opacity: 0;
+    transform: translate(-50%, -10px) scale(0.99);
+  }
+}
+
+.mega-content:not(.metamint-is-active):not(.is-active),
+.metamint-main-nav .mega-content:not(.metamint-is-active):not(.is-active) {
+  display: none !important;
+}
+
+.mega-content.metamint-is-active,
+.mega-content.is-active,
+.metamint-main-nav .mega-content.metamint-is-active,
+.metamint-main-nav .mega-content.is-active {
+  display: flex;
+  gap: 1.25rem;
+  max-width: 1152px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1.5rem 2rem;
+  box-sizing: border-box;
+  animation: mmMegaContentIn 0.26s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.mega-content.is-layout-grid.metamint-is-active,
+.mega-content.is-layout-grid.is-active {
+  display: grid !important;
+}
+
+.mega-content.wp-block-columns.metamint-is-active,
+.mega-content.wp-block-columns.is-active {
+  display: flex !important;
+}
+
+/* Allow theme block designs to dictate columns:
+   In a flex row, items distribute equally (4 items = 4 columns, 2 items = 2 columns).
+   If custom widths are set in the block editor, preserve them. */
+.mega-content .mm-item,
+.metamint-main-nav .mm-item {
+  flex: 1 1 0%;
+  min-width: 0;
+  min-inline-size: 0;
+  box-sizing: border-box;
+}
+
+.mega-content .mm-item[style*="flex-basis"],
+.mega-content .mm-item[style*="width"] {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.navigation-container {
+  max-width: var(--page-size-wide, 1152px);
+}
+
+.mega-content-group {
+  display: none;
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -10px) scale(0.99);
+  width: 1152px;
+  max-width: min(1152px, calc(100vw - 32px));
+  z-index: -1;
+  background-color: white;
+  box-shadow: 0 16px 48px -8px rgba(0, 0, 0, 0.12), 0 4px 16px -2px rgba(0, 0, 0, 0.04);
+  border-bottom-left-radius: 40px;
+  border-bottom-right-radius: 40px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    display 0.28s,
+    opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-behavior: allow-discrete;
+}
+
+button.mega-toggle-arrow {
+  display: none;
+}
+
+.mega-link .wp-block-navigation-item__content {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.mega-link .wp-block-navigation-item__content:hover:after {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease;
+}
+
+.mega-link .wp-block-navigation-item__content::after {
+  content: "";
+  background: url("../images/icon-chevron-down.svg") no-repeat;
+  width: 10px;
+  height: 5px;
+}
+
+.wp-block-navigation__responsive-container-content {
+  align-items: flex-start !important;
+}
+
+.wp-block-navigation__container.is-responsive > li {
+  flex-direction: row !important;
+  width: max-content;
+  display: flex;
+  align-content: center;
+  flex-wrap: wrap;
+  align-items: center !important;
+}
+
+.wp-block-navigation .wp-block-navigation-item:hover a {
+  opacity: 0.65;
+}
+
+.mega-content .wp-block-group .wp-block-column p {
+  margin: 0;
+}
+
+.mm-item {
+  padding: 22px 30px !important;
+  border-radius: var(--radius-20);
+  transition: all 0.3s ease;
+}
+
+.mm-item:hover {
+  cursor: pointer;
+  background: rgb(65 0 110 / 5%);
+}
+
+.mm-item a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.wp-block-navigation .wp-block-navigation-item.m-show {
+  display: none;
+}
+
+.mm-item .wp-block-heading {
+  margin-bottom: 0.75rem;
+}
+
+.mm-item:hover .wp-block-heading {
+  color: var(--c-primary);
+}
+
+/* NEW MEGA MENU CSS  */
+
+/* .metamint-main-nav {
+  max-width: var(--page-size-wide);
+} */
+
+.metamint-main-nav > button {
+  display: none;
+  background: var(--c-primary);
+  padding: 0.55rem 0.95rem;
+  border-radius: var(--radius-200);
+  border: 0;
+}
+
+.metamint-main-nav > button svg {
+  fill: var(--c-text-light);
+}
+
+.metamint-main-nav .nav-content {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  /* position: relative; */
+  margin: 0;
+}
+
+.metamint-main-nav .mega-content-group {
+  display: none;
+  position: absolute;
+  top: 56%;
+  left: 50%;
+  transform: translate(-50%, -10px) scale(0.99);
+  width: 1152px;
+  max-width: min(1152px, calc(100vw - 32px));
+  z-index: -1;
+  background-color: white;
+  box-shadow: 0 16px 48px -8px rgba(0, 0, 0, 0.12), 0 4px 16px -2px rgba(0, 0, 0, 0.04);
+  margin: 0 auto;
+  border-bottom-left-radius: 40px;
+  border-bottom-right-radius: 40px;
+  box-sizing: border-box;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    display 0.28s,
+    opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-behavior: allow-discrete;
+}
+
+/* .metamint-main-nav  .mega-link.has-mega-menu.is-active .mega-content-group {
+  display: block;
+} */
+
+.metamint-main-nav .has-mega-menu.is-active .mega-content-group {
+  display: block;
+  opacity: 1;
+  transform: translate(-50%, 0) scale(1);
+  pointer-events: auto;
+  animation: mmMegaDropdownIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@starting-style {
+  .metamint-main-nav .has-mega-menu.is-active .mega-content-group {
+    opacity: 0;
+    transform: translate(-50%, -10px) scale(0.99);
+  }
+}
+
+.metamint-main-nav .mega-link {
+  list-style: none;
+}
+
+.metamint-main-nav .mega-content:not(.metamint-is-active):not(.is-active) {
+  display: none !important;
+}
+
+.metamint-main-nav .mega-content.metamint-is-active,
+.metamint-main-nav .mega-content.is-active {
+  display: flex;
+  flex-direction: row;
+  gap: 1.25rem;
+  max-width: 1152px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1.5rem 2rem;
+  box-sizing: border-box;
+}
+
+.metamint-main-nav .mega-link .navigation-item-content {
+  display: inline-block;
+  gap: 6px;
+  align-items: center;
+  text-decoration: none;
+  color: var(--c-dark-purple);
+  font-size: 1rem;
+}
+
+.metamint-main-nav .mega-link.is-active .navigation-item-content,
+.metamint-main-nav .mega-link:hover .navigation-item-content {
+  color: #796f8b;
+}
+
+/* .metamint-main-nav .mega-link.has-mega-menu .navigation-item-content::after {
+  content: "";
+  background: url("../images/icon-chevron-down.svg")
+    no-repeat;
+  width: 10px;
+  height: 5px;
+} */
+
+.metamint-main-nav .mega-link.has-mega-menu .mega-menu-dropdown {
+  content: "";
+  background: url("../images/icon-chevron-down.svg") no-repeat;
+  width: 10px;
+  height: 10px;
+  left: 0;
+  margin-top: 5px;
+  display: inline-block;
+  margin-left: 6px;
+  background-position: 0 center;
+}
+
+.metamint-main-nav .mega-link.is-active .mega-menu-dropdown {
+  transform: rotate(180deg);
+  /* transition: transform 0.3s ease; */
+  /* margin-top: -5px; */
+  background-position: right center;
+}
+
+.metamint-main-nav .wp-block-navigation__responsive-container-content {
+  align-items: flex-start !important;
+}
+
+.metamint-main-nav .wp-block-navigation__container.is-responsive > li {
+  flex-direction: row !important;
+  width: max-content;
+  display: flex;
+  align-content: center;
+  flex-wrap: wrap;
+  align-items: center !important;
+}
+
+.metamint-main-nav .wp-block-navigation .wp-block-navigation-item:hover a {
+  opacity: 0.65;
+}
+
+.metamint-main-nav .mega-content .wp-block-group .wp-block-column p {
+  margin: 0;
+}
+
+.mm-item,
+.metamint-main-nav .mm-item {
+  padding: 22px 24px !important;
+  border-radius: var(--radius-20, 20px);
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.mm-item.wp-block-columns {
+  align-items: flex-start;
+  gap: 0.85rem;
+}
+
+.mm-item.wp-block-columns > .wp-block-column:first-child:has(figure) {
+  flex: 0 0 auto;
+  max-width: 44px;
+}
+
+.metamint-main-nav .mm-item a {
+  display: flex;
+  flex-direction: row;
+  gap: 0.85rem;
+}
+
+.mm-item figure,
+.metamint-main-nav .mm-item figure {
+  margin: 0;
+  width: 28px;
+}
+
+.mm-item figure img,
+.metamint-main-nav .mm-item figure img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.mm-item:hover,
+.metamint-main-nav .mm-item:hover {
+  cursor: pointer;
+  background: rgb(65 0 110 / 5%);
+}
+
+.mm-item a,
+.metamint-main-nav .mm-item a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.mm-item .wp-block-heading,
+.metamint-main-nav .mm-item .wp-block-heading {
+  margin-bottom: 0.75rem;
+  margin-top: 0;
+}
+
+.metamint-main-nav .mm-item:hover .wp-block-heading {
+  color: var(--c-primary);
+}
+
+.metamint-main-nav .mm-item .item-detail {
+  flex: 1;
+}
+
+.metamint-main-nav .mega-content h6 {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.metamint-main-nav .mm-item .item-detail p {
+  font-size: 1rem;
+}
+
+@media screen and (max-width: 991px) {
+  .metamint-main-nav > button {
+    display: block;
+  }
+
+  .metamint-main-nav .nav-container {
+    display: none;
+  }
+
+  .metamint-main-nav.active .nav-container {
+    display: block;
+    position: absolute;
+    /* background: #FFF; */
+    left: 0;
+    top: 25px;
+    z-index: -1;
+    width: 100%;
+    padding: 0;
+    max-height: 80vh;
+    overflow: auto;
+    background: #fff;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+  }
+
+  .metamint-main-nav .mega-link.has-mega-menu .mega-menu-dropdown {
+    width: 40px;
+  }
+
+  .metamint-main-nav .nav-content {
+    display: flex;
+    width: 100%;
+    padding: 2.5rem 1.5rem;
+    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 1.5rem;
+    /* background: #FFF;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px; */
+  }
+
+  .mega-content-group,
+  .metamint-main-nav .mega-content-group {
+    position: static;
+    left: auto;
+    right: auto;
+    transform: none;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .metamint-main-nav .mega-link.is-active .mega-content,
+  .mega-link.is-active .mega-content,
+  .mega-content.metamint-is-active,
+  .metamint-main-nav .mega-content.metamint-is-active {
+    display: flex !important;
+    flex-wrap: wrap;
+    padding-right: 2rem !important;
+    gap: 1.25rem;
+    padding-top: 1.5rem;
+  }
+
+  .metamint-main-nav .mm-item .wp-block-heading {
+    margin-bottom: 0.5rem;
+  }
+
+  .mega-content .mm-item,
+  .metamint-main-nav .mm-item,
+  .metamint-main-nav .menu-facilities-commitments .mm-item {
+    padding: 0 !important;
+    flex-basis: 100% !important;
+    width: 100%;
+  }
+
+  .metamint-main-nav .mm-item .item-detail p {
+    font-size: 0.813rem;
+  }
+
+  .metamint-main-nav .mm-item:hover {
+    background: unset;
+    transform: none;
+  }
+}
+
+/* =======================================
+ * Mega Menu Keyframe Animations & Micro-Interactions
+ * ======================================= */
+@keyframes mmMegaDropdownIn {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -10px) scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+
+@keyframes mmMegaContentIn {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mm-item,
+.metamint-main-nav .mm-item {
+  transition:
+    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.mm-item:hover,
+.metamint-main-nav .mm-item:hover {
+  transform: translateY(-2px);
+}
+
+.mega-link .wp-block-navigation-item__content::after,
+.metamint-main-nav .mega-link .mega-menu-dropdown {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mega-link.is-active .wp-block-navigation-item__content::after,
+.metamint-main-nav .mega-link.is-active .mega-menu-dropdown {
+  transform: rotate(180deg);
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .mega-content-group,
+  .metamint-main-nav .mega-content-group,
+  .mega-content.metamint-is-active,
+  .metamint-main-nav .mega-content.metamint-is-active,
+  .mm-item,
+  .metamint-main-nav .mm-item {
+    animation: none !important;
+    transition: none !important;
+    transform: translateX(-50%) !important;
+  }
+
+  @starting-style {
+    .mega-content-group.metamint-is-visible,
+    .metamint-main-nav .has-mega-menu.is-active .mega-content-group {
+      transform: translateX(-50%) !important;
+    }
+  }
+}

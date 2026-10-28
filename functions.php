@@ -62,6 +62,8 @@ add_action('wp_enqueue_scripts', function () {
 	);
 	wp_enqueue_style('metamint-main', METAMINT_URI . '/assets/css/main.css', ['metamint-fonts'], time());
 	wp_enqueue_script('metamint-main', METAMINT_URI . '/assets/js/main.js', [], time(), true);
+	wp_enqueue_style('metamint-mega-menu', METAMINT_URI . '/assets/css/mega-menu.css', [], time());
+	wp_enqueue_script('metamint-mega-menu', METAMINT_URI . '/assets/js/mega-menu.js', [], time(), true);
 });
 
 add_action('enqueue_block_editor_assets', function () {
