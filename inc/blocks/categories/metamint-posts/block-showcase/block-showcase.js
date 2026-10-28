@@ -71,11 +71,6 @@
               iframe._ytPlayer.unloadModule("captions");
               iframe._ytPlayer.unloadModule("cc");
             }
-            if (typeof iframe._ytPlayer.setOption === "function") {
-              iframe._ytPlayer.setOption("captions", "track", {});
-              iframe._ytPlayer.setOption("cc", "track", {});
-              iframe._ytPlayer.setOption("captions", "reload", false);
-            }
           } catch (e) {}
         }
         if (iframe.contentWindow) {
@@ -93,30 +88,6 @@
                 event: "command",
                 func: "unloadModule",
                 args: ["cc"],
-              }),
-              "*",
-            );
-            iframe.contentWindow.postMessage(
-              JSON.stringify({
-                event: "command",
-                func: "setOption",
-                args: ["captions", "track", {}],
-              }),
-              "*",
-            );
-            iframe.contentWindow.postMessage(
-              JSON.stringify({
-                event: "command",
-                func: "setOption",
-                args: ["cc", "track", {}],
-              }),
-              "*",
-            );
-            iframe.contentWindow.postMessage(
-              JSON.stringify({
-                event: "command",
-                func: "setOption",
-                args: ["captions", "reload", false],
               }),
               "*",
             );
@@ -629,11 +600,27 @@
 
         // Advance slide on video end (playerState === 0)
         if (playerState === 0) {
-          container.querySelectorAll(".mm-slide-video").forEach(function (sv) {
-            sv.classList.remove("is-playing");
-          });
-          if (slideHasVideo(currentIndex)) {
-            next();
+          if (total <= 1) {
+            container.querySelectorAll("iframe").forEach(function (iframe) {
+              if (iframe._ytPlayer && typeof iframe._ytPlayer.playVideo === "function") {
+                try {
+                  iframe._ytPlayer.seekTo(0);
+                  iframe._ytPlayer.playVideo();
+                } catch (e) {}
+              } else if (iframe.contentWindow) {
+                try {
+                  iframe.contentWindow.postMessage(JSON.stringify({ event: "command", func: "seekTo", args: [0, true] }), "*");
+                  iframe.contentWindow.postMessage(JSON.stringify({ event: "command", func: "playVideo", args: "" }), "*");
+                } catch (e) {}
+              }
+            });
+          } else {
+            container.querySelectorAll(".mm-slide-video").forEach(function (sv) {
+              sv.classList.remove("is-playing");
+            });
+            if (slideHasVideo(currentIndex)) {
+              next();
+            }
           }
         }
       });
@@ -820,7 +807,33 @@
             } catch (e) {}
           }
         });
+        container.querySelectorAll(".mm-slide.is-active video").forEach(function (vid) {
+          try {
+            vid.muted = true;
+            var p = vid.play();
+            if (p && typeof p.catch === "function") {
+              p.catch(function () {});
+            }
+          } catch (e) {}
+        });
       }
+
+      // Handle native HTML5 video loop or advancement on end
+      container.querySelectorAll("video").forEach(function (vid) {
+        vid.addEventListener("ended", function () {
+          if (total > 1) {
+            next();
+          } else {
+            try {
+              vid.currentTime = 0;
+              vid.play();
+            } catch (e) {}
+          }
+        });
+      });
+
+      // Immediate play attempt
+      kickstartActiveVideos();
 
       if ("IntersectionObserver" in window) {
         var obs = new IntersectionObserver(function (entries) {

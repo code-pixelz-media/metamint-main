@@ -55,10 +55,36 @@ $parse_video_embed = function ($embed_data) {
 
   // Handle direct HTML5 video files (.mp4, .webm, .mov)
   if (is_string($embed_data) && preg_match('/\.(mp4|webm|mov)(\?.*)?$/i', trim($embed_data))) {
+    $video_url = trim($embed_data);
+    if (strpos($video_url, 'http') !== 0 && strpos($video_url, '//') !== 0) {
+      $video_url = get_template_directory_uri() . '/' . ltrim($video_url, '/');
+    }
     return sprintf(
-      '<video src="%s" autoplay muted loop playsinline></video>',
-      esc_url(trim($embed_data))
+      '<video src="%s" autoplay muted loop playsinline preload="auto"></video>',
+      esc_url($video_url)
     );
+  }
+
+  // Check if a local high-performance background MP4 video is available for YouTube videos
+  // to eliminate YouTube player controls, play/pause buttons, next buttons,
+  // top black gradients, and subtitle bars completely without changing design or functionality.
+  $detected_yt_id = '';
+  if (is_string($embed_data) && preg_match('/(?:embed\/|youtu\.be\/|v\/|watch\?(?:.*&)?v=|shorts\/)([a-zA-Z0-9_-]{11})/i', $embed_data, $m)) {
+    $detected_yt_id = $m[1];
+  }
+
+  $local_video_mappings = [
+    'uAo_vXWlO_4' => 'assets/videos/zapier-addon-metamint.mp4',
+  ];
+  if (!empty($detected_yt_id) && isset($local_video_mappings[$detected_yt_id])) {
+    $theme_file = get_template_directory() . '/' . $local_video_mappings[$detected_yt_id];
+    if (file_exists($theme_file)) {
+      $theme_url = get_template_directory_uri() . '/' . $local_video_mappings[$detected_yt_id];
+      return sprintf(
+        '<video src="%s" autoplay muted loop playsinline preload="auto"></video>',
+        esc_url($theme_url)
+      );
+    }
   }
 
   $iframe = '';
@@ -137,7 +163,9 @@ $parse_video_embed = function ($embed_data) {
       $params['widget_referrer'] = $site_origin;
       $params['vq'] = 'hd720';
       $params['hd'] = '1';
-      $params['cc_load_policy'] = '0';
+      $params['cc_lang_pref'] = 'zxx';
+      $params['hl'] = 'en';
+      // Deliberately omitted playlist and loop here so YouTube never shows the "Next" (⏭) button
     }
 
     if ($is_vimeo) {
@@ -333,16 +361,6 @@ $custom_class = !empty($block['className']) ? ' ' . $block['className'] : '';
                 data-slide-index="<?php echo esc_attr($index); ?>">
                 <?php if (($slide['desktop_type'] ?? '') === 'video' && !empty($slide['desktop_video'])): ?>
                   <div class="mm-slide-media mm-slide-video">
-                    <?php
-                    $d_poster = !empty($slide['desktop_image']) ? $slide['desktop_image'] : '';
-                    if (empty($d_poster) && preg_match('/(?:embed\/|youtu\.be\/|v\/|watch\?(?:.*&)?v=|shorts\/)([a-zA-Z0-9_-]{11})/i', $slide['desktop_video'], $vm)) {
-                      $d_poster = 'https://i.ytimg.com/vi/' . $vm[1] . '/maxresdefault.jpg';
-                    }
-                    if (!empty($d_poster)): ?>
-                      <img class="mm-video-poster" src="<?php echo esc_url($d_poster); ?>" alt="" loading="eager"
-                        aria-hidden="true"
-                        onerror="if(this.src.indexOf('maxresdefault')!==-1)this.src=this.src.replace('maxresdefault','hqdefault');">
-                    <?php endif; ?>
                     <?php echo $slide['desktop_video']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                     <div class="mm-video-shield" aria-hidden="true"></div>
                     <button type="button" class="mm-video-sound-toggle is-muted" data-sound-toggle
@@ -388,16 +406,6 @@ $custom_class = !empty($block['className']) ? ' ' . $block['className'] : '';
                   data-slide-index="<?php echo esc_attr($index); ?>">
                   <?php if (($slide['mobile_type'] ?? '') === 'video' && !empty($slide['mobile_video'])): ?>
                     <div class="mm-slide-media mm-slide-video">
-                      <?php
-                      $m_poster = !empty($slide['mobile_image']) ? $slide['mobile_image'] : (!empty($slide['desktop_image']) ? $slide['desktop_image'] : '');
-                      if (empty($m_poster) && preg_match('/(?:embed\/|youtu\.be\/|v\/|watch\?(?:.*&)?v=|shorts\/)([a-zA-Z0-9_-]{11})/i', $slide['mobile_video'], $vm)) {
-                        $m_poster = 'https://i.ytimg.com/vi/' . $vm[1] . '/maxresdefault.jpg';
-                      }
-                      if (!empty($m_poster)): ?>
-                        <img class="mm-video-poster" src="<?php echo esc_url($m_poster); ?>" alt="" loading="eager"
-                          aria-hidden="true"
-                          onerror="if(this.src.indexOf('maxresdefault')!==-1)this.src=this.src.replace('maxresdefault','hqdefault');">
-                      <?php endif; ?>
                       <?php echo $slide['mobile_video']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                       <div class="mm-video-shield" aria-hidden="true"></div>
                       <button type="button" class="mm-video-sound-toggle is-muted" data-sound-toggle

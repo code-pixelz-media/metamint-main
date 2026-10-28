@@ -239,53 +239,29 @@
   -webkit-user-select: none;
 }
 
-/* Clean poster image shown while video is loading first */
 .mm-video-poster {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 3;
-  opacity: 1;
-  pointer-events: none;
-  transition: opacity 0.45s ease;
-  background: #000000;
-}
-
-.mm-mobile-screen .mm-slide .mm-video-poster {
-  width: calc(100% + 2px);
-  min-width: calc(100% + 2px);
-  height: 100%;
-  margin-right: -2px;
-  object-fit: cover;
-}
-
-.mm-slide-video.is-playing .mm-video-poster {
-  opacity: 0 !important;
-  pointer-events: none;
+  display: none !important;
 }
 
 .mm-slide-video iframe {
-  opacity: 1;
+  opacity: 1 !important;
   z-index: 2;
 }
 
-/* Offset iframe vertically by 60px so YouTube title bar and 'More videos' are pushed outside the overflow:hidden container */
+/* Offset iframe vertically by 115px so YouTube top gradient (98px), title bar, and 'More videos' are pushed outside the overflow:hidden container */
 .mm-desktop-screen .mm-slide-video iframe {
   position: absolute;
-  top: -60px !important;
+  top: -115px !important;
   left: 0 !important;
   width: 100% !important;
-  height: calc(100% + 120px) !important;
+  height: calc(100% + 230px) !important;
   max-width: none !important;
   border: 0;
   outline: none;
   display: block;
   pointer-events: none;
   transform: none;
-  opacity: 1;
+  opacity: 1 !important;
   z-index: 2;
 }
 
@@ -307,8 +283,11 @@
   height: 100% !important;
   max-width: none !important;
   border: 0;
+  outline: none;
   display: block;
-  object-fit: contain;
+  object-fit: cover;
+  opacity: 1 !important;
+  z-index: 2;
 }
 
 /* Ensure mobile screen has zero subpixel hairline gap on right edge */
@@ -333,15 +312,31 @@
   top: 50% !important;
   left: 50% !important;
   transform: translate(-50%, -50%) !important;
-  width: 122% !important;
-  height: 114% !important;
-  max-width: none !important;
+  width: 100% !important;
+  aspect-ratio: 16 / 9 !important;
+  height: auto !important;
+  max-width: 100% !important;
   border: 0;
   outline: none;
   display: block;
   pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.4s ease;
+  opacity: 1 !important;
+  z-index: 2;
+}
+
+.mm-mobile-screen .mm-slide-video video {
+  position: absolute;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  border: 0;
+  outline: none;
+  display: block;
+  object-fit: contain;
+  opacity: 1 !important;
   z-index: 2;
 }
 
