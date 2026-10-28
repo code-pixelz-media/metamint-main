@@ -104,44 +104,58 @@ $parse_video_embed = function ($embed_data) {
   $iframe = preg_replace_callback('/src=["\']([^"\']+)["\']/i', function ($matches) use ($video_id) {
     $url = html_entity_decode($matches[1]);
     $is_youtube = (strpos($url, 'youtube') !== false || strpos($url, 'youtu.be') !== false);
-    $is_vimeo   = (strpos($url, 'vimeo') !== false);
-
-    if ($is_youtube) {
-      // Use privacy-enhanced domain
-      $url = str_replace(
-        ['http://www.youtube.com', 'https://www.youtube.com', 'http://youtube.com', 'https://youtube.com'],
-        'https://www.youtube-nocookie.com',
-        $url
-      );
-    }
+    $is_vimeo = (strpos($url, 'vimeo') !== false);
 
     $params = [
-      'autoplay'    => '1',
-      'mute'        => '1',
-      'controls'    => '0',
+      'autoplay' => '1',
+      'mute'     => '1',
+      'muted'    => '1',
+      'controls' => '0',
       'playsinline' => '1',
     ];
 
     if ($is_youtube) {
-      $params['rel']            = '0';
+      // Robust detection of current site origin, accounting for HTTPS reverse proxies / Cloudflare
+      $is_https = is_ssl()
+        || (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https')
+        || (!empty($_SERVER['HTTP_X_FORWARDED_SSL']) && strtolower($_SERVER['HTTP_X_FORWARDED_SSL']) === 'on')
+        || (!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off');
+
+      $scheme = $is_https ? 'https://' : 'http://';
+      $host = $_SERVER['HTTP_HOST'] ?? (parse_url(home_url(), PHP_URL_HOST) ?: 'localhost');
+      $site_origin = rtrim($scheme . $host, '/');
+
+      $params['rel'] = '0';
       $params['modestbranding'] = '1';
       $params['iv_load_policy'] = '3';
-      $params['disablekb']      = '1';
-      $params['fs']             = '0';
-      $params['showinfo']       = '0';
-      $params['autohide']       = '1';
-      $params['enablejsapi']    = '1';
-      $params['vq']             = 'hd1080';
-      if (!empty($video_id)) {
-        $params['loop']     = '1';
-        $params['playlist'] = $video_id;
-      }
+      $params['disablekb'] = '1';
+      $params['fs'] = '0';
+      $params['showinfo'] = '0';
+      $params['autohide'] = '1';
+      $params['enablejsapi'] = '1';
+      $params['origin'] = $site_origin;
+      $params['widget_referrer'] = $site_origin;
+      $params['vq'] = 'hd720';
+      $params['hd'] = '1';
+      $params['cc_load_policy'] = '0';
     }
 
     if ($is_vimeo) {
-      $params['muted']      = '1';
+      $params['muted'] = '1';
       $params['background'] = '1';
-      $params['loop']       = '1';
+      $params['loop'] = '1';
+    }
+
+    // For YouTube, use a clean base URL without playlist/mix params (list, start_radio, etc.)
+    // to strictly prevent YouTube from showing related playlist videos initially
+    if ($is_youtube && !empty($video_id)) {
+      $base = 'https://www.youtube.com/embed/' . $video_id;
+      if (function_exists('add_query_arg')) {
+        $new_url = add_query_arg($params, $base);
+      } else {
+        $new_url = $base . '?' . http_build_query($params);
+      }
+      return 'src="' . esc_url($new_url) . '"';
     }
 
     if (function_exists('add_query_arg')) {
@@ -178,8 +192,12 @@ $parse_video_embed = function ($embed_data) {
     $iframe = str_replace('<iframe', '<iframe allowfullscreen', $iframe);
   }
 
-  // Remove small fixed width/height attributes so YouTube renders in full HD resolution
+  // Remove fixed width/height attributes so iframe is clean and fully responsive
   $iframe = preg_replace('/\s(width|height)=["\'][0-9]+["\']/i', '', $iframe);
+  static $yt_embed_counter = 0;
+  $yt_embed_counter++;
+  $embed_id = 'mm-yt-' . ($video_id ?: 'video') . '-' . $yt_embed_counter;
+  $iframe = preg_replace('/<iframe/i', '<iframe id="' . esc_attr($embed_id) . '" data-video-id="' . esc_attr($video_id) . '"', $iframe, 1);
 
   return $iframe;
 };
@@ -206,12 +224,12 @@ if (empty($raw_slides) && !empty($block_data['showcase_slides'])) {
   $count = is_numeric($block_data['showcase_slides']) ? (int) $block_data['showcase_slides'] : 0;
   for ($i = 0; $i < $count; $i++) {
     $raw_slides[] = [
-      'showcase_image_video'        => $block_data["showcase_slides_{$i}_showcase_image_video"] ?? ($block_data["showcase_slides_{$i}_desktop_image_video"] ?? ''),
-      'desktop_image'               => $block_data["showcase_slides_{$i}_desktop_image"] ?? '',
-      'desktop_video'               => $block_data["showcase_slides_{$i}_desktop_video"] ?? '',
+      'showcase_image_video' => $block_data["showcase_slides_{$i}_showcase_image_video"] ?? ($block_data["showcase_slides_{$i}_desktop_image_video"] ?? ''),
+      'desktop_image' => $block_data["showcase_slides_{$i}_desktop_image"] ?? '',
+      'desktop_video' => $block_data["showcase_slides_{$i}_desktop_video"] ?? '',
       'showcase_image_video_mobile' => $block_data["showcase_slides_{$i}_showcase_image_video_mobile"] ?? ($block_data["showcase_slides_{$i}_mobile_image_video"] ?? ''),
-      'mobile_image'                => $block_data["showcase_slides_{$i}_mobile_image"] ?? '',
-      'mobile_video'                => $block_data["showcase_slides_{$i}_mobile_video"] ?? '',
+      'mobile_image' => $block_data["showcase_slides_{$i}_mobile_image"] ?? '',
+      'mobile_video' => $block_data["showcase_slides_{$i}_mobile_video"] ?? '',
     ];
   }
 }
@@ -220,12 +238,12 @@ $slides = [];
 if (!empty($raw_slides) && is_array($raw_slides)) {
   foreach ($raw_slides as $item) {
     $desktop_mode = $get_mode($item['showcase_image_video'] ?? ($item['desktop_image_video'] ?? ''));
-    $desktop_img  = $parse_img($item['desktop_image'] ?? '');
-    $desktop_vid  = $parse_video_embed($item['desktop_video'] ?? '');
+    $desktop_img = $parse_img($item['desktop_image'] ?? '');
+    $desktop_vid = $parse_video_embed($item['desktop_video'] ?? '');
 
-    $mobile_mode  = $get_mode($item['showcase_image_video_mobile'] ?? ($item['mobile_image_video'] ?? ''));
-    $mobile_img   = $parse_img($item['mobile_image'] ?? '');
-    $mobile_vid   = $parse_video_embed($item['mobile_video'] ?? '');
+    $mobile_mode = $get_mode($item['showcase_image_video_mobile'] ?? ($item['mobile_image_video'] ?? ''));
+    $mobile_img = $parse_img($item['mobile_image'] ?? '');
+    $mobile_vid = $parse_video_embed($item['mobile_video'] ?? '');
 
     // Determine desktop type
     if ($desktop_mode === 'video') {
@@ -263,21 +281,21 @@ if (!empty($raw_slides) && is_array($raw_slides)) {
 
     // Fall back to desktop media for mobile device if separate mobile media is not set
     if (empty($mobile_type)) {
-      $mobile_type  = $desktop_type;
-      $mobile_img   = $desktop_img;
-      $mobile_vid   = $desktop_vid;
+      $mobile_type = $desktop_type;
+      $mobile_img = $desktop_img;
+      $mobile_vid = $desktop_vid;
     }
 
     if (!empty($desktop_type) || !empty($mobile_type)) {
       $slides[] = [
-        'desktop_type'  => $desktop_type,
+        'desktop_type' => $desktop_type,
         'desktop_image' => $desktop_img,
         'desktop_video' => $desktop_vid,
-        'mobile_type'   => $mobile_type,
-        'mobile_image'  => $mobile_img,
-        'mobile_video'  => $mobile_vid,
-        'desktop'       => $desktop_img,
-        'mobile'        => $mobile_img,
+        'mobile_type' => $mobile_type,
+        'mobile_image' => $mobile_img,
+        'mobile_video' => $mobile_vid,
+        'desktop' => $desktop_img,
+        'mobile' => $mobile_img,
       ];
     }
   }
@@ -315,15 +333,30 @@ $custom_class = !empty($block['className']) ? ' ' . $block['className'] : '';
                 data-slide-index="<?php echo esc_attr($index); ?>">
                 <?php if (($slide['desktop_type'] ?? '') === 'video' && !empty($slide['desktop_video'])): ?>
                   <div class="mm-slide-media mm-slide-video">
+                    <?php
+                    $d_poster = !empty($slide['desktop_image']) ? $slide['desktop_image'] : '';
+                    if (empty($d_poster) && preg_match('/(?:embed\/|youtu\.be\/|v\/|watch\?(?:.*&)?v=|shorts\/)([a-zA-Z0-9_-]{11})/i', $slide['desktop_video'], $vm)) {
+                      $d_poster = 'https://i.ytimg.com/vi/' . $vm[1] . '/maxresdefault.jpg';
+                    }
+                    if (!empty($d_poster)): ?>
+                      <img class="mm-video-poster" src="<?php echo esc_url($d_poster); ?>" alt="" loading="eager"
+                        aria-hidden="true"
+                        onerror="if(this.src.indexOf('maxresdefault')!==-1)this.src=this.src.replace('maxresdefault','hqdefault');">
+                    <?php endif; ?>
                     <?php echo $slide['desktop_video']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                     <div class="mm-video-shield" aria-hidden="true"></div>
-                    <button type="button" class="mm-video-sound-toggle is-muted" data-sound-toggle aria-label="Unmute video">
-                      <svg class="mm-sound-icon mm-icon-muted" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <button type="button" class="mm-video-sound-toggle is-muted" data-sound-toggle
+                      aria-label="Unmute video">
+                      <svg class="mm-sound-icon mm-icon-muted" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        aria-hidden="true">
                         <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
                         <line x1="23" y1="9" x2="17" y2="15"></line>
                         <line x1="17" y1="9" x2="23" y2="15"></line>
                       </svg>
-                      <svg class="mm-sound-icon mm-icon-unmuted" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <svg class="mm-sound-icon mm-icon-unmuted" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        aria-hidden="true">
                         <polygon points="11 5 6 9 2 9 2 15 6 15 11 5"></polygon>
                         <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
                       </svg>
@@ -331,8 +364,7 @@ $custom_class = !empty($block['className']) ? ' ' . $block['className'] : '';
                   </div>
                 <?php elseif (!empty($slide['desktop_image']) || !empty($slide['desktop'])): ?>
                   <?php $d_img = !empty($slide['desktop_image']) ? $slide['desktop_image'] : $slide['desktop']; ?>
-                  <img src="<?php echo esc_url($d_img); ?>"
-                    alt="Desktop showcase <?php echo esc_attr($index + 1); ?>"
+                  <img src="<?php echo esc_url($d_img); ?>" alt="Desktop showcase <?php echo esc_attr($index + 1); ?>"
                     loading="<?php echo $index === 0 ? 'eager' : 'lazy'; ?>">
                 <?php endif; ?>
               </div>
@@ -356,15 +388,30 @@ $custom_class = !empty($block['className']) ? ' ' . $block['className'] : '';
                   data-slide-index="<?php echo esc_attr($index); ?>">
                   <?php if (($slide['mobile_type'] ?? '') === 'video' && !empty($slide['mobile_video'])): ?>
                     <div class="mm-slide-media mm-slide-video">
+                      <?php
+                      $m_poster = !empty($slide['mobile_image']) ? $slide['mobile_image'] : (!empty($slide['desktop_image']) ? $slide['desktop_image'] : '');
+                      if (empty($m_poster) && preg_match('/(?:embed\/|youtu\.be\/|v\/|watch\?(?:.*&)?v=|shorts\/)([a-zA-Z0-9_-]{11})/i', $slide['mobile_video'], $vm)) {
+                        $m_poster = 'https://i.ytimg.com/vi/' . $vm[1] . '/maxresdefault.jpg';
+                      }
+                      if (!empty($m_poster)): ?>
+                        <img class="mm-video-poster" src="<?php echo esc_url($m_poster); ?>" alt="" loading="eager"
+                          aria-hidden="true"
+                          onerror="if(this.src.indexOf('maxresdefault')!==-1)this.src=this.src.replace('maxresdefault','hqdefault');">
+                      <?php endif; ?>
                       <?php echo $slide['mobile_video']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                       <div class="mm-video-shield" aria-hidden="true"></div>
-                      <button type="button" class="mm-video-sound-toggle is-muted" data-sound-toggle aria-label="Unmute video">
-                        <svg class="mm-sound-icon mm-icon-muted" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <button type="button" class="mm-video-sound-toggle is-muted" data-sound-toggle
+                        aria-label="Unmute video">
+                        <svg class="mm-sound-icon mm-icon-muted" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                          aria-hidden="true">
                           <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
                           <line x1="23" y1="9" x2="17" y2="15"></line>
                           <line x1="17" y1="9" x2="23" y2="15"></line>
                         </svg>
-                        <svg class="mm-sound-icon mm-icon-unmuted" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <svg class="mm-sound-icon mm-icon-unmuted" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                          aria-hidden="true">
                           <polygon points="11 5 6 9 2 9 2 15 6 15 11 5"></polygon>
                           <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
                         </svg>
@@ -372,8 +419,7 @@ $custom_class = !empty($block['className']) ? ' ' . $block['className'] : '';
                     </div>
                   <?php elseif (!empty($slide['mobile_image']) || !empty($slide['mobile'])): ?>
                     <?php $m_img = !empty($slide['mobile_image']) ? $slide['mobile_image'] : $slide['mobile']; ?>
-                    <img src="<?php echo esc_url($m_img); ?>"
-                      alt="Mobile showcase <?php echo esc_attr($index + 1); ?>"
+                    <img src="<?php echo esc_url($m_img); ?>" alt="Mobile showcase <?php echo esc_attr($index + 1); ?>"
                       loading="<?php echo $index === 0 ? 'eager' : 'lazy'; ?>">
                   <?php endif; ?>
                 </div>
@@ -388,30 +434,30 @@ $custom_class = !empty($block['className']) ? ' ' . $block['className'] : '';
 
     <!-- Controls / Navigation Indicators (Commented out per user request) -->
     <?php /* if (count($slides) > 1): ?>
-      <div class="mm-showcase-controls" data-showcase-controls>
-        <button type="button" class="mm-showcase-nav-btn prev" data-showcase-prev aria-label="Previous slide">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="15 18 9 12 15 6"></polyline>
-          </svg>
-        </button>
+ <div class="mm-showcase-controls" data-showcase-controls>
+   <button type="button" class="mm-showcase-nav-btn prev" data-showcase-prev aria-label="Previous slide">
+     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+       stroke-linecap="round" stroke-linejoin="round">
+       <polyline points="15 18 9 12 15 6"></polyline>
+     </svg>
+   </button>
 
-        <div class="mm-showcase-dots" data-showcase-dots>
-          <?php foreach ($slides as $index => $slide): ?>
-            <button type="button" class="mm-dot-indicator<?php echo $index === 0 ? ' is-active' : ''; ?>"
-              data-slide-to="<?php echo esc_attr($index); ?>" aria-label="Go to slide <?php echo esc_attr($index + 1); ?>">
-              <span class="dot-progress"></span>
-            </button>
-          <?php endforeach; ?>
-        </div>
+   <div class="mm-showcase-dots" data-showcase-dots>
+     <?php foreach ($slides as $index => $slide): ?>
+       <button type="button" class="mm-dot-indicator<?php echo $index === 0 ? ' is-active' : ''; ?>"
+         data-slide-to="<?php echo esc_attr($index); ?>" aria-label="Go to slide <?php echo esc_attr($index + 1); ?>">
+         <span class="dot-progress"></span>
+       </button>
+     <?php endforeach; ?>
+   </div>
 
-        <button type="button" class="mm-showcase-nav-btn next" data-showcase-next aria-label="Next slide">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="9 18 15 12 9 6"></polyline>
-          </svg>
-        </button>
-      </div>
-    <?php endif; */ ?>
+   <button type="button" class="mm-showcase-nav-btn next" data-showcase-next aria-label="Next slide">
+     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+       stroke-linecap="round" stroke-linejoin="round">
+       <polyline points="9 18 15 12 9 6"></polyline>
+     </svg>
+   </button>
+ </div>
+<?php endif; */ ?>
   </div>
 </section>
