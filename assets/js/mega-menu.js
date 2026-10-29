@@ -37,10 +37,12 @@ document.addEventListener("DOMContentLoaded", () => {
     </svg>
   `;
 
-  const megaContentGroup = document.querySelector(".mega-content-group");
-  const megaContents = megaContentGroup
-    ? megaContentGroup.querySelectorAll(":scope > .mega-content, .mega-content")
-    : [];
+  const getAllMegaGroups = () =>
+    document.querySelectorAll(".mega-content-group");
+  const getAllMegaContents = () =>
+    document.querySelectorAll(".mega-content");
+  const getAllMegaLinks = () =>
+    document.querySelectorAll(".mega-link");
 
   let hideTimeout;
 
@@ -48,34 +50,36 @@ document.addEventListener("DOMContentLoaded", () => {
   // Helper: Close all open submenus (both Mega and standard WP)
   // ----------------------------------------------------
   const metamint_close_all_submenus = () => {
-    // 1. Mega menu submenus
-    document
-      .querySelectorAll(".mega-content.metamint-is-active, .mega-content.is-active")
-      .forEach((content) => {
-        content.classList.remove("metamint-is-active");
-        content.classList.remove("is-active");
-      });
+    // 1. Mega menu submenus & containers
+    getAllMegaGroups().forEach((group) => {
+      group.classList.remove("metamint-is-visible");
+    });
+
+    getAllMegaContents().forEach((content) => {
+      content.classList.remove("metamint-is-active");
+      content.classList.remove("is-active");
+    });
 
     document.querySelectorAll(".mega-toggle-arrow").forEach((arrow) => {
       arrow.classList.remove(arrowActiveClass);
       arrow.dataset.state = "closed";
     });
 
-    document.querySelectorAll(".mega-link.is-active").forEach((link) => {
+    getAllMegaLinks().forEach((link) => {
       link.classList.remove("is-active");
     });
 
-    if (megaContentGroup) {
-      megaContentGroup.classList.remove("metamint-is-visible");
-    }
-
     // 2. Standard WordPress navigation submenus
     document
-      .querySelectorAll(".wp-block-navigation-submenu.is-open, .wp-block-navigation-submenu[aria-expanded='true']")
+      .querySelectorAll(
+        ".wp-block-navigation-submenu.is-open, .wp-block-navigation-submenu[aria-expanded='true']",
+      )
       .forEach((item) => {
         item.classList.remove("is-open");
         item.removeAttribute("aria-expanded");
-        const toggleBtn = item.querySelector(".wp-block-navigation-submenu__toggle, button");
+        const toggleBtn = item.querySelector(
+          ".wp-block-navigation-submenu__toggle, button",
+        );
         if (toggleBtn) {
           toggleBtn.setAttribute("aria-expanded", "false");
         }
@@ -95,17 +99,22 @@ document.addEventListener("DOMContentLoaded", () => {
       if (matched) return matched;
     }
     // Fallback: match by index
-    const allLinks = Array.from(document.querySelectorAll(".mega-link"));
+    const allLinks = Array.from(
+      document.querySelectorAll(
+        ".desktop-menu .mega-link, .wp-block-navigation .mega-link",
+      ),
+    );
+    const allContents = Array.from(getAllMegaContents());
     const idx = allLinks.indexOf(navItem);
-    if (idx !== -1 && megaContents[idx]) {
-      return megaContents[idx];
+    if (idx !== -1 && allContents[idx]) {
+      return allContents[idx];
     }
     return null;
   };
 
-  if (megaContentGroup && megaContents.length > 0) {
+  const initDesktopMegaMenu = () => {
     const allNavListItems = document.querySelectorAll(
-      ".wp-block-navigation__container > li, .metamint-main-nav .nav-content > li, .mega-link"
+      ".wp-block-navigation__container > li, .metamint-main-nav .nav-content > li, .mega-link",
     );
 
     allNavListItems.forEach((navItem) => {
@@ -118,8 +127,13 @@ document.addEventListener("DOMContentLoaded", () => {
           if (targetContent) {
             metamint_close_all_submenus();
             navItem.classList.add("is-active");
-            megaContentGroup.classList.add("metamint-is-visible");
             targetContent.classList.add("metamint-is-active");
+
+            // Make the matching .mega-content-group container visible
+            const parentGroup = targetContent.closest(".mega-content-group");
+            if (parentGroup) {
+              parentGroup.classList.add("metamint-is-visible");
+            }
           } else {
             metamint_close_all_submenus();
           }
@@ -130,53 +144,65 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     const navContainers = document.querySelectorAll(
-      ".wp-block-navigation__container, .metamint-main-nav .nav-content, .header-wrapper"
+      ".wp-block-navigation__container, .metamint-main-nav .nav-content, .header-wrapper",
     );
     navContainers.forEach((container) => {
       container.addEventListener("mouseleave", (e) => {
         if (isMobile()) return;
-        if (
+        const toMegaGroup =
           e.relatedTarget &&
-          (megaContentGroup.contains(e.relatedTarget) ||
-            megaContentGroup === e.relatedTarget)
-        ) {
+          e.relatedTarget.closest &&
+          e.relatedTarget.closest(".mega-content-group");
+        if (toMegaGroup) {
           return;
         }
         hideTimeout = setTimeout(metamint_close_all_submenus, 250);
       });
     });
 
-    megaContentGroup.addEventListener("mouseenter", () => {
-      if (isMobile()) return;
-      if (hideTimeout) clearTimeout(hideTimeout);
-      megaContentGroup.classList.add("metamint-is-visible");
-    });
+    getAllMegaGroups().forEach((group) => {
+      group.addEventListener("mouseenter", () => {
+        if (isMobile()) return;
+        if (hideTimeout) clearTimeout(hideTimeout);
+        group.classList.add("metamint-is-visible");
+      });
 
-    megaContentGroup.addEventListener("mouseleave", (e) => {
-      if (isMobile()) return;
-      const toMegaLink =
-        e.relatedTarget &&
-        e.relatedTarget.closest &&
-        e.relatedTarget.closest(".mega-link");
-      if (toMegaLink) return;
-      hideTimeout = setTimeout(metamint_close_all_submenus, 250);
+      group.addEventListener("mouseleave", (e) => {
+        if (isMobile()) return;
+        const toMegaLink =
+          e.relatedTarget &&
+          e.relatedTarget.closest &&
+          e.relatedTarget.closest(".mega-link");
+        const toMegaGroup =
+          e.relatedTarget &&
+          e.relatedTarget.closest &&
+          e.relatedTarget.closest(".mega-content-group");
+        if (toMegaLink || toMegaGroup) return;
+        hideTimeout = setTimeout(metamint_close_all_submenus, 250);
+      });
     });
-  }
+  };
+
+  initDesktopMegaMenu();
 
   // ----------------------------------------------------
   // Mobile Mega Menu DOM Transfer & Accordions
   // ----------------------------------------------------
   function metamint_restore_desktop_dom() {
-    document.querySelectorAll(".mega-link").forEach((menuItem) => {
+    getAllMegaLinks().forEach((menuItem) => {
       const classList = Array.from(menuItem.classList);
       const megaClass = classList.find((cls) => cls.startsWith("mega-menu"));
       if (!megaClass) return;
 
       const number = megaClass.replace("mega-menu", "");
-      const megaContent = menuItem.querySelector(`.mega-content${number}`);
+      const megaContent =
+        menuItem.querySelector(`.mega-content${number}`) ||
+        menuItem.querySelector(`.mega-content`);
+      const placeholder = document.getElementById(`mm-placeholder-${number}`);
 
-      if (megaContent && megaContentGroup && megaContent.parentElement === menuItem) {
-        megaContentGroup.appendChild(megaContent);
+      if (megaContent && placeholder && placeholder.parentElement) {
+        placeholder.parentElement.insertBefore(megaContent, placeholder);
+        placeholder.remove();
       }
 
       const arrow = menuItem.querySelector(".mega-toggle-arrow");
@@ -189,7 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function moveMegaContentsToMobile() {
     if (!isMobile()) return;
-    document.querySelectorAll(".mega-link").forEach((menuItem) => {
+    getAllMegaLinks().forEach((menuItem) => {
       const classList = Array.from(menuItem.classList);
       const megaClass = classList.find((cls) => cls.startsWith("mega-menu"));
       if (!megaClass) return;
@@ -198,6 +224,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const megaContent = document.querySelector(`.mega-content${number}`);
 
       if (megaContent && megaContent.parentElement !== menuItem) {
+        let placeholder = document.getElementById(`mm-placeholder-${number}`);
+        if (!placeholder && megaContent.parentElement) {
+          placeholder = document.createElement("div");
+          placeholder.id = `mm-placeholder-${number}`;
+          placeholder.style.display = "none";
+          megaContent.parentElement.insertBefore(placeholder, megaContent);
+        }
         menuItem.appendChild(megaContent);
       }
     });
@@ -213,7 +246,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!megaClass) return;
 
       const number = megaClass.replace("mega-menu", "");
-      const content = item.querySelector(`.mega-content${number}`) || document.querySelector(`.mega-content${number}`);
+      const content =
+        item.querySelector(`.mega-content${number}`) ||
+        document.querySelector(`.mega-content${number}`);
       if (!content) return;
 
       const link = item.querySelector(".wp-block-navigation-item__content, a");
@@ -237,15 +272,19 @@ document.addEventListener("DOMContentLoaded", () => {
         const isOpen = content.classList.contains(activeClass);
 
         // Close other mega contents
-        document.querySelectorAll(`.mega-content.${activeClass}`).forEach((el) => {
-          if (el !== content) el.classList.remove(activeClass);
-        });
-        document.querySelectorAll(`.mega-toggle-arrow.${arrowActiveClass}`).forEach((el) => {
-          if (el !== arrow) {
-            el.classList.remove(arrowActiveClass);
-            el.dataset.state = "closed";
-          }
-        });
+        document
+          .querySelectorAll(`.mega-content.${activeClass}`)
+          .forEach((el) => {
+            if (el !== content) el.classList.remove(activeClass);
+          });
+        document
+          .querySelectorAll(`.mega-toggle-arrow.${arrowActiveClass}`)
+          .forEach((el) => {
+            if (el !== arrow) {
+              el.classList.remove(arrowActiveClass);
+              el.dataset.state = "closed";
+            }
+          });
         document.querySelectorAll(`.mega-link.${activeClass}`).forEach((el) => {
           if (el !== item) el.classList.remove(activeClass);
         });
@@ -269,7 +308,10 @@ document.addEventListener("DOMContentLoaded", () => {
       freshArrow.addEventListener("click", toggleAction);
 
       // Allow clicking the link itself to toggle submenu if link has no page or href="#"
-      if (link && (link.getAttribute("href") === "#" || !link.getAttribute("href"))) {
+      if (
+        link &&
+        (link.getAttribute("href") === "#" || !link.getAttribute("href"))
+      ) {
         link.addEventListener("click", (e) => {
           toggleAction(e);
         });
@@ -282,14 +324,16 @@ document.addEventListener("DOMContentLoaded", () => {
   // ----------------------------------------------------
   function initStandardSubmenuToggles() {
     const submenus = document.querySelectorAll(
-      ".mobile-menu .wp-block-navigation-submenu, .wp-block-navigation__responsive-container .wp-block-navigation-submenu"
+      ".mobile-menu .wp-block-navigation-submenu, .wp-block-navigation__responsive-container .wp-block-navigation-submenu",
     );
 
     submenus.forEach((submenu) => {
       const toggle = submenu.querySelector(
-        ":scope > .wp-block-navigation-submenu__toggle, :scope > .wp-block-navigation-item__content"
+        ":scope > .wp-block-navigation-submenu__toggle, :scope > .wp-block-navigation-item__content",
       );
-      const icon = submenu.querySelector(":scope > .wp-block-navigation__submenu-icon");
+      const icon = submenu.querySelector(
+        ":scope > .wp-block-navigation__submenu-icon",
+      );
 
       const handleToggle = (e) => {
         if (!isMobile()) return;
@@ -373,7 +417,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Bind all hamburger open buttons
   const openButtons = document.querySelectorAll(
-    ".wp-block-navigation__responsive-container-open"
+    ".wp-block-navigation__responsive-container-open",
   );
 
   openButtons.forEach((btn) => {
@@ -381,10 +425,14 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
 
       // Find the associated responsive container
-      const nav = btn.closest(".wp-block-navigation") || btn.closest(".mm-nav-wrap");
+      const nav =
+        btn.closest(".wp-block-navigation") || btn.closest(".mm-nav-wrap");
       const container =
-        (nav && nav.querySelector(".wp-block-navigation__responsive-container")) ||
-        document.querySelector(".mobile-menu .wp-block-navigation__responsive-container") ||
+        (nav &&
+          nav.querySelector(".wp-block-navigation__responsive-container")) ||
+        document.querySelector(
+          ".mobile-menu .wp-block-navigation__responsive-container",
+        ) ||
         document.querySelector(".wp-block-navigation__responsive-container");
 
       if (!container) return;
@@ -401,7 +449,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Bind all close buttons
   document.addEventListener("click", (e) => {
-    const closeBtn = e.target.closest(".wp-block-navigation__responsive-container-close");
+    const closeBtn = e.target.closest(
+      ".wp-block-navigation__responsive-container-close",
+    );
     if (closeBtn) {
       e.preventDefault();
       closeAllMobileDrawers();
@@ -410,11 +460,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Click outside open menu container closes it
     const openContainers = document.querySelectorAll(
-      ".wp-block-navigation__responsive-container.is-menu-open"
+      ".wp-block-navigation__responsive-container.is-menu-open",
     );
     if (openContainers.length > 0) {
-      const isInside = Array.from(openContainers).some((c) => c.contains(e.target));
-      const isOnOpenBtn = Array.from(openButtons).some((b) => b.contains(e.target));
+      const isInside = Array.from(openContainers).some((c) =>
+        c.contains(e.target),
+      );
+      const isOnOpenBtn = Array.from(openButtons).some((b) =>
+        b.contains(e.target),
+      );
       if (!isInside && !isOnOpenBtn) {
         closeAllMobileDrawers();
       }

@@ -394,7 +394,7 @@ body:not(.admin-bar) .mm-nav-wrap {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  background: rgba(255, 255, 255, 0.78);
+  background: rgba(255, 255, 255, 1);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(24, 24, 27, 0.07);
@@ -1807,13 +1807,8 @@ form#slicewp-affiliate-lost-password-form {
   border-radius: 50px;
 }
 @media (max-width: 859px) {
-  .desktop-menu,
-  .mm-nav .desktop-menu,
-  .mm-nav .mm-nav-links:not(.mobile-menu) {
-    display: none !important;
-  }
   .mobile-menu {
-    display: inherit;
+    display: block !important;
   }
   .mm-nav .mobile-menu,
   .mobile-menu.mm-nav-links,
@@ -1848,9 +1843,48 @@ form#slicewp-affiliate-lost-password-form {
     margin: 0 !important;
     padding: 0 !important;
   }
-  .mm-nav-mobile .wp-block-navigation__responsive-container-open,
-  .mm-nav-mobile .wp-block-navigation__responsive-container-open.always-shown,
-  .mobile-menu .wp-block-navigation__responsive-container-open {
+
+  .mm-nav {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 8px 12px 8px 16px !important;
+    gap: 8px !important;
+  }
+  .mm-nav .wp-block-site-logo {
+    flex-shrink: 0 !important;
+    margin: 0 !important;
+  }
+  .mm-nav .wp-block-site-logo img {
+    width: 140px !important;
+    height: auto !important;
+    max-width: 140px !important;
+  }
+  .mm-nav .order3 {
+    order: 3 !important;
+    width: auto !important;
+    flex-basis: auto !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+  .mm-nav .order3 .wp-block-column {
+    flex-basis: auto !important;
+    width: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .mm-nav .order3 .header-wrapper {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .wp-block-navigation {
+    position: relative !important;
+  }
+
+  button.wp-block-navigation__responsive-container-open {
     background: var(--mm-wash, #f4f4f2) !important;
     border: 1px solid var(--mm-line, #e8e8e4) !important;
     width: 33px !important;
@@ -2015,31 +2049,44 @@ form#slicewp-affiliate-lost-password-form {
   margin: auto !important;
 }
 
-/* Dropdown menu card below the hamburger/close icon */
+/* Dropdown menu card below the hamburger/close icon - 100% screen width on mobile */
 .wp-block-navigation__responsive-container.is-menu-open
   .wp-block-navigation__responsive-container-content {
-  position: absolute !important;
-  top: calc(100% + 10px) !important;
+  position: fixed !important;
+  top: 76px !important;
+  left: 0 !important;
   right: 0 !important;
-  min-width: 240px !important;
-  max-width: min(calc(100vw - 32px), 320px) !important;
-  width: max-content !important;
+  width: 100% !important;
+  width: 100vw !important;
+  width: 100dvw !important;
+  max-width: 100% !important;
+  min-width: 100% !important;
   background: #ffffff !important;
-  border: 1px solid var(--mm-line, #e8e8e4) !important;
-  border-radius: 20px !important;
+  border-top: 1px solid var(--mm-line, #e8e8e4) !important;
+  border-bottom: 1px solid var(--mm-line, #e8e8e4) !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-radius: 0 0 20px 20px !important;
   box-shadow:
     0 16px 40px rgba(0, 0, 0, 0.12),
     0 2px 10px rgba(0, 0, 0, 0.04) !important;
-  padding: 10px !important;
+  padding: 16px 20px !important;
   box-sizing: border-box !important;
   z-index: 100001 !important;
-  max-height: calc(85vh - 80px) !important;
+  max-height: calc(100dvh - 86px) !important;
   overflow-y: auto !important;
   -webkit-overflow-scrolling: touch;
   display: flex !important;
   flex-direction: column !important;
-  transform-origin: top right;
+  transform-origin: top center;
   animation: mm-dropdown-pop 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+}
+
+body.admin-bar
+  .wp-block-navigation__responsive-container.is-menu-open
+  .wp-block-navigation__responsive-container-content {
+  top: 52px !important;
+  max-height: calc(100dvh - 122px) !important;
 }
 
 .wp-block-navigation__responsive-container.is-menu-open
@@ -2058,7 +2105,7 @@ form#slicewp-affiliate-lost-password-form {
   margin: 0 !important;
   width: 100% !important;
   display: flex !important;
-  flex-direction: column !important;
+  /* flex-direction: column !important; */
 }
 
 .wp-block-navigation__responsive-container.is-menu-open
@@ -2087,20 +2134,26 @@ form#slicewp-affiliate-lost-password-form {
 }
 
 /* Submenu parent row layout (label on left, arrow toggle on right, dropdown below) */
-.wp-block-navigation__responsive-container.is-menu-open li.wp-block-navigation-submenu,
+.wp-block-navigation__responsive-container.is-menu-open
+  li.wp-block-navigation-submenu,
 .mobile-menu li.wp-block-navigation-submenu {
   display: flex !important;
   flex-flow: row wrap !important;
   align-items: center !important;
 }
 
-.wp-block-navigation__responsive-container.is-menu-open li.wp-block-navigation-submenu > .wp-block-navigation-item__content,
-.mobile-menu li.wp-block-navigation-submenu > .wp-block-navigation-item__content {
+.wp-block-navigation__responsive-container.is-menu-open
+  li.wp-block-navigation-submenu
+  > .wp-block-navigation-item__content,
+.mobile-menu
+  li.wp-block-navigation-submenu
+  > .wp-block-navigation-item__content {
   flex: 1 !important;
 }
 
 .mobile-menu .wp-block-navigation__submenu-icon,
-.wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__submenu-icon {
+.wp-block-navigation__responsive-container.is-menu-open
+  .wp-block-navigation__submenu-icon {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -2110,15 +2163,20 @@ form#slicewp-affiliate-lost-password-form {
   transition: transform 0.2s ease !important;
 }
 
-.wp-block-navigation__responsive-container.is-menu-open li.wp-block-navigation-submenu > .wp-block-navigation__submenu-container,
-.mobile-menu li.wp-block-navigation-submenu > .wp-block-navigation__submenu-container {
+.wp-block-navigation__responsive-container.is-menu-open
+  li.wp-block-navigation-submenu
+  > .wp-block-navigation__submenu-container,
+.mobile-menu
+  li.wp-block-navigation-submenu
+  > .wp-block-navigation__submenu-container {
   flex-basis: 100% !important;
   width: 100% !important;
 }
 
 /* Submenu dropdowns in mobile menu - collapsed by default */
 .mobile-menu .wp-block-navigation__submenu-container,
-.wp-block-navigation__responsive-container .wp-block-navigation__submenu-container {
+.wp-block-navigation__responsive-container
+  .wp-block-navigation__submenu-container {
   display: none !important;
   box-shadow: none !important;
   border: none !important;
@@ -2126,8 +2184,12 @@ form#slicewp-affiliate-lost-password-form {
 }
 
 /* Submenu dropdowns shown when open */
-.mobile-menu li.wp-block-navigation-submenu.is-open > .wp-block-navigation__submenu-container,
-.wp-block-navigation__responsive-container.is-menu-open li.wp-block-navigation-submenu.is-open > .wp-block-navigation__submenu-container {
+.mobile-menu
+  li.wp-block-navigation-submenu.is-open
+  > .wp-block-navigation__submenu-container,
+.wp-block-navigation__responsive-container.is-menu-open
+  li.wp-block-navigation-submenu.is-open
+  > .wp-block-navigation__submenu-container {
   display: flex !important;
   flex-direction: column !important;
   visibility: visible !important;
@@ -2169,8 +2231,14 @@ form#slicewp-affiliate-lost-password-form {
 }
 
 /* Submenu toggle icon arrow rotation when open */
-.mobile-menu .wp-block-navigation-submenu.is-open .wp-block-navigation__submenu-icon svg,
-.wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation-submenu.is-open .wp-block-navigation__submenu-icon svg {
+.mobile-menu
+  .wp-block-navigation-submenu.is-open
+  .wp-block-navigation__submenu-icon
+  svg,
+.wp-block-navigation__responsive-container.is-menu-open
+  .wp-block-navigation-submenu.is-open
+  .wp-block-navigation__submenu-icon
+  svg {
   transform: rotate(180deg) !important;
 }
 

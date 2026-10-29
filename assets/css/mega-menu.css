@@ -9,6 +9,7 @@ header.wp-block-template-part {
   width: 100%;
   margin-left: auto;
   margin-right: auto;
+  display: block;
 }
 
 .header-wrapper {
@@ -89,7 +90,9 @@ header.wp-block-template-part {
   max-width: min(1152px, calc(100vw - 32px));
   z-index: -1;
   background-color: white;
-  box-shadow: 0 16px 48px -8px rgba(0, 0, 0, 0.12), 0 4px 16px -2px rgba(0, 0, 0, 0.04);
+  box-shadow:
+    0 16px 48px -8px rgba(0, 0, 0, 0.12),
+    0 4px 16px -2px rgba(0, 0, 0, 0.04);
   border-bottom-left-radius: 40px;
   border-bottom-right-radius: 40px;
   margin: 0 auto;
@@ -171,7 +174,7 @@ button.mega-toggle-arrow {
 }
 
 .mm-item:hover .wp-block-heading {
-  color: var(--c-primary);
+  color: var(--color-brand);
 }
 
 /* NEW MEGA MENU CSS  */
@@ -182,7 +185,7 @@ button.mega-toggle-arrow {
 
 .metamint-main-nav > button {
   display: none;
-  background: var(--c-primary);
+  background: var(--color-brand);
   padding: 0.55rem 0.95rem;
   border-radius: var(--radius-200);
   border: 0;
@@ -211,7 +214,9 @@ button.mega-toggle-arrow {
   max-width: min(1152px, calc(100vw - 32px));
   z-index: -1;
   background-color: white;
-  box-shadow: 0 16px 48px -8px rgba(0, 0, 0, 0.12), 0 4px 16px -2px rgba(0, 0, 0, 0.04);
+  box-shadow:
+    0 16px 48px -8px rgba(0, 0, 0, 0.12),
+    0 4px 16px -2px rgba(0, 0, 0, 0.04);
   margin: 0 auto;
   border-bottom-left-radius: 40px;
   border-bottom-right-radius: 40px;
@@ -328,8 +333,8 @@ button.mega-toggle-arrow {
 
 .mm-item,
 .metamint-main-nav .mm-item {
-  padding: 22px 24px !important;
-  border-radius: var(--radius-20, 20px);
+  padding: 10px 16px !important;
+  border-radius: 8px;
   cursor: pointer;
   box-sizing: border-box;
 }
@@ -382,7 +387,7 @@ button.mega-toggle-arrow {
 }
 
 .metamint-main-nav .mm-item:hover .wp-block-heading {
-  color: var(--c-primary);
+  color: var(--color-brand);
 }
 
 .metamint-main-nav .mm-item .item-detail {
@@ -518,7 +523,6 @@ button.mega-toggle-arrow {
     width: 100% !important;
     border-radius: 8px !important;
     transform: none !important;
-    background: transparent !important;
   }
 
   .mega-content .mm-item:hover,
@@ -534,6 +538,13 @@ button.mega-toggle-arrow {
   .metamint-main-nav .mm-item:hover {
     background: unset;
     transform: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .wp-block-navigation-item,
+  .wp-block-navigation-item.mega-link.wp-block-navigation-link {
+    flex-direction: row !important;
   }
 }
 
@@ -605,3 +616,5 @@ button.mega-toggle-arrow {
     }
   }
 }
+
+/* NEw css */
