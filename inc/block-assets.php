@@ -44,7 +44,6 @@ function theme_enqueue_assets()
     ];
 
     $global_scripts = [
-        'mega-menu.js',
         'inc/blocks/categories/category-banner/hero-default/hero-default.js'
     ];
 
@@ -66,7 +65,6 @@ function theme_enqueue_assets()
         $frontend_scripts = [
             'lenis.min.js',
             'slick.min.js',
-            'mega-menu.js',
             'gsap.min.js',
             'ScrollTrigger.min.js',
             'MotionPathPlugin.min.js',

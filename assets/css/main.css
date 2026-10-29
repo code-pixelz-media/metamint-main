@@ -381,7 +381,13 @@ body.admin-bar .mm-nav-wrap {
   padding: 0;
 }
 body:not(.admin-bar) .mm-nav-wrap {
+  position: fixed;
+  z-index: 50;
   top: 16px;
+  width: 1152px;
+  max-width: 100%;
+  margin: 16px auto 0;
+  padding: 0;
 }
 .mm-nav {
   display: flex;
@@ -2080,10 +2086,48 @@ form#slicewp-affiliate-lost-password-form {
   color: var(--mm-teal, #0f7173) !important;
 }
 
-/* Submenu dropdowns shown by default and indented as children */
+/* Submenu parent row layout (label on left, arrow toggle on right, dropdown below) */
+.wp-block-navigation__responsive-container.is-menu-open li.wp-block-navigation-submenu,
+.mobile-menu li.wp-block-navigation-submenu {
+  display: flex !important;
+  flex-flow: row wrap !important;
+  align-items: center !important;
+}
+
+.wp-block-navigation__responsive-container.is-menu-open li.wp-block-navigation-submenu > .wp-block-navigation-item__content,
+.mobile-menu li.wp-block-navigation-submenu > .wp-block-navigation-item__content {
+  flex: 1 !important;
+}
+
+.mobile-menu .wp-block-navigation__submenu-icon,
+.wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__submenu-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 10px 14px !important;
+  margin-left: auto !important;
+  cursor: pointer !important;
+  transition: transform 0.2s ease !important;
+}
+
+.wp-block-navigation__responsive-container.is-menu-open li.wp-block-navigation-submenu > .wp-block-navigation__submenu-container,
+.mobile-menu li.wp-block-navigation-submenu > .wp-block-navigation__submenu-container {
+  flex-basis: 100% !important;
+  width: 100% !important;
+}
+
+/* Submenu dropdowns in mobile menu - collapsed by default */
 .mobile-menu .wp-block-navigation__submenu-container,
-.wp-block-navigation__responsive-container.is-menu-open
-  .wp-block-navigation__submenu-container {
+.wp-block-navigation__responsive-container .wp-block-navigation__submenu-container {
+  display: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+/* Submenu dropdowns shown when open */
+.mobile-menu li.wp-block-navigation-submenu.is-open > .wp-block-navigation__submenu-container,
+.wp-block-navigation__responsive-container.is-menu-open li.wp-block-navigation-submenu.is-open > .wp-block-navigation__submenu-container {
   display: flex !important;
   flex-direction: column !important;
   visibility: visible !important;
@@ -2099,6 +2143,7 @@ form#slicewp-affiliate-lost-password-form {
   gap: 2px !important;
   list-style: none !important;
   min-width: 0 !important;
+  animation: mm-dropdown-pop 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
 }
 
 .mobile-menu
@@ -2123,11 +2168,10 @@ form#slicewp-affiliate-lost-password-form {
   background: rgba(15, 113, 115, 0.06) !important;
 }
 
-/* Hide toggle icon arrow since dropdown children are displayed by default */
-.mobile-menu .wp-block-navigation__submenu-icon,
-.wp-block-navigation__responsive-container.is-menu-open
-  .wp-block-navigation__submenu-icon {
-  display: none !important;
+/* Submenu toggle icon arrow rotation when open */
+.mobile-menu .wp-block-navigation-submenu.is-open .wp-block-navigation__submenu-icon svg,
+.wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation-submenu.is-open .wp-block-navigation__submenu-icon svg {
+  transform: rotate(180deg) !important;
 }
 
 @keyframes mm-dropdown-pop {

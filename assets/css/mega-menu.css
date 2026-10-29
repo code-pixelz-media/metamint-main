@@ -439,16 +439,57 @@ button.mega-toggle-arrow {
   border-bottom-right-radius: 20px; */
   }
 
+  button.mega-toggle-arrow {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    margin-left: auto;
+    color: inherit;
+    transition: transform 0.25s ease;
+  }
+
+  button.mega-toggle-arrow.active svg,
+  button.mega-toggle-arrow[data-state="open"] svg,
+  .mega-link.is-active > button.mega-toggle-arrow svg {
+    transform: rotate(180deg);
+  }
+
+  .mega-link .wp-block-navigation-item__content::after {
+    display: none !important;
+  }
+
+  .mega-link.has-mega-menu,
+  .wp-block-navigation-item.mega-link {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    width: 100% !important;
+  }
+
+  .mega-link > .wp-block-navigation-item__content {
+    flex: 1;
+  }
+
   .mega-content-group,
   .metamint-main-nav .mega-content-group {
-    position: static;
+    position: static !important;
     left: auto;
     right: auto;
-    transform: none;
-    width: 100%;
-    max-width: 100%;
-    border-radius: 0;
-    box-shadow: none;
+    transform: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+  }
+
+  .mega-content:not(.metamint-is-active):not(.is-active) {
+    display: none !important;
   }
 
   .metamint-main-nav .mega-link.is-active .mega-content,
@@ -456,10 +497,13 @@ button.mega-toggle-arrow {
   .mega-content.metamint-is-active,
   .metamint-main-nav .mega-content.metamint-is-active {
     display: flex !important;
-    flex-wrap: wrap;
-    padding-right: 2rem !important;
-    gap: 1.25rem;
-    padding-top: 1.5rem;
+    flex-direction: column !important;
+    flex-wrap: wrap !important;
+    width: 100% !important;
+    padding: 6px 0 10px 14px !important;
+    border-left: 2px solid var(--mm-line, #e8e8e4) !important;
+    gap: 0.75rem !important;
+    box-sizing: border-box !important;
   }
 
   .metamint-main-nav .mm-item .wp-block-heading {
@@ -469,9 +513,18 @@ button.mega-toggle-arrow {
   .mega-content .mm-item,
   .metamint-main-nav .mm-item,
   .metamint-main-nav .menu-facilities-commitments .mm-item {
-    padding: 0 !important;
+    padding: 6px 10px !important;
     flex-basis: 100% !important;
-    width: 100%;
+    width: 100% !important;
+    border-radius: 8px !important;
+    transform: none !important;
+    background: transparent !important;
+  }
+
+  .mega-content .mm-item:hover,
+  .metamint-main-nav .mm-item:hover {
+    background: rgba(15, 113, 115, 0.06) !important;
+    transform: none !important;
   }
 
   .metamint-main-nav .mm-item .item-detail p {
