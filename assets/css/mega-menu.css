@@ -150,7 +150,6 @@ button.mega-toggle-arrow {
 }
 
 .mm-item {
-  padding: 22px 30px !important;
   border-radius: var(--radius-20);
   transition: all 0.3s ease;
 }
@@ -333,15 +332,112 @@ button.mega-toggle-arrow {
 
 .mm-item,
 .metamint-main-nav .mm-item {
-  padding: 10px 16px !important;
   border-radius: 8px;
   cursor: pointer;
   box-sizing: border-box;
+  gap: 8px !important;
+}
+
+@media (min-width: 860px) {
+  /* Mega menu 1: Lock columns so large text in one column never shifts or wraps other columns */
+  .mega-content1 .width100 {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(320px, 380px) !important;
+    gap: 24px !important;
+    align-items: stretch !important;
+  }
+
+  .mega-content1 .width100 > * {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Mega menu 2: Lock columns so large content in one column never shifts sibling columns */
+  .mega-content.mega-content2 {
+    display: grid !important;
+    grid-auto-flow: column !important;
+    grid-auto-columns: 1fr !important;
+    gap: 20px !important;
+  }
+
+  .mega-content2 > * {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Allow text to wrap cleanly inside item boundaries without expanding column width */
+  .mega-content .mm-item,
+  .mm-item {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    gap: 8px !important;
+  }
+
+  .mega-content .mm-item p,
+  .mega-content .mm-item .wp-block-paragraph,
+  .mm-item p,
+  .mm-item .item-detail {
+    min-width: 0 !important;
+    overflow-wrap: break-word !important;
+    word-break: break-word !important;
+    white-space: normal !important;
+    flex: 1 1 0% !important;
+  }
+
+  .mega-content .mm-item figure,
+  .mm-item figure {
+    flex-shrink: 0 !important;
+  }
+
+  /* Apply shift padding ONLY to true link items, NOT promo cards or column containers */
+  .mm-item:not(.has-background):not(.has-teal-dark-background-color),
+  .metamint-main-nav .mm-item:not(.has-background) {
+    padding: 8px 0 !important;
+  }
+
+  .mm-item:not(.has-background):not(.has-teal-dark-background-color):hover,
+  .metamint-main-nav .mm-item:not(.has-background):hover {
+    padding: 8px 16px !important;
+    background: rgb(65 0 110 / 5%) !important;
+  }
+
+  /* Preserve promo banner column (Helpdesk addon card in mega-menu1) */
+  .wp-block-group.has-teal-dark-background-color,
+  .wp-block-group.mm-item.has-background {
+    padding: 28px 32px !important;
+    background-color: var(--wp--preset--color--teal-dark, #0c5e60) !important;
+    transform: none !important;
+  }
+
+  .wp-block-group.has-teal-dark-background-color:hover,
+  .wp-block-group.mm-item.has-background:hover {
+    padding: 28px 32px !important;
+    background-color: var(--wp--preset--color--teal-dark, #0c5e60) !important;
+    transform: none !important;
+  }
+
+  /* Multi-link column container in mega-menu2 (Whats Hot): keep column transparent */
+  .mega-content2 > .wp-block-group.mm-item {
+    padding: 8px 0 !important;
+    background: transparent !important;
+    transform: none !important;
+  }
+
+  .mega-content2 > .wp-block-group.mm-item:hover {
+    padding: 8px 0 !important;
+    background: transparent !important;
+    transform: none !important;
+  }
 }
 
 .mm-item.wp-block-columns {
   align-items: flex-start;
-  gap: 0.85rem;
+  gap: 8px !important;
 }
 
 .mm-item.wp-block-columns > .wp-block-column:first-child:has(figure) {
@@ -352,7 +448,7 @@ button.mega-toggle-arrow {
 .metamint-main-nav .mm-item a {
   display: flex;
   flex-direction: row;
-  gap: 0.85rem;
+  gap: 8px !important;
 }
 
 .mm-item figure,
@@ -403,7 +499,7 @@ button.mega-toggle-arrow {
   font-size: 1rem;
 }
 
-@media screen and (max-width: 991px) {
+@media screen and (max-width: 859px) {
   .metamint-main-nav > button {
     display: block;
   }
@@ -511,6 +607,14 @@ button.mega-toggle-arrow {
     box-sizing: border-box !important;
   }
 
+  .mega-content1 .width100,
+  .mega-content.mega-content2 {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+    width: 100% !important;
+  }
+
   .metamint-main-nav .mm-item .wp-block-heading {
     margin-bottom: 0.5rem;
   }
@@ -523,6 +627,7 @@ button.mega-toggle-arrow {
     width: 100% !important;
     border-radius: 8px !important;
     transform: none !important;
+    gap: 8px !important;
   }
 
   .mega-content .mm-item:hover,
@@ -576,6 +681,7 @@ button.mega-toggle-arrow {
 .mm-item,
 .metamint-main-nav .mm-item {
   transition:
+    padding 0.25s cubic-bezier(0.16, 1, 0.3, 1),
     transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
     background-color 0.2s ease,
     box-shadow 0.2s ease;
