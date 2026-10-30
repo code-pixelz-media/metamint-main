@@ -15,3 +15,36 @@
   --mm-accent:   var(--mm-teal);
   --mm-accent-d: var(--mm-teal-d);
 }
+
+/* ==========================================================================
+   Hide Header and Footer template parts ONLY when editing a Page.
+   Never hide them when editing Templates (wp_template) or Patterns (wp_block).
+   ========================================================================== */
+body.post-type-page:not(.is-editing-template) header.wp-block-template-part,
+body.post-type-page:not(.is-editing-template) footer.wp-block-template-part,
+body.post-type-page:not(.is-editing-template) .wp-block-template-part[data-type="core/template-part"][aria-label*="Header"],
+body.post-type-page:not(.is-editing-template) .wp-block-template-part[data-type="core/template-part"][aria-label*="Footer"],
+body.post-type-page:not(.is-editing-template) .wp-block-template-part[data-title*="Header"],
+body.post-type-page:not(.is-editing-template) .wp-block-template-part[data-title*="Footer"],
+body.post-type-page:not(.is-editing-template) .wp-block-template-part[data-slug*="header"],
+body.post-type-page:not(.is-editing-template) .wp-block-template-part[data-slug*="footer"],
+body.post-type-page:not(.is-editing-template) [data-title="Header"],
+body.post-type-page:not(.is-editing-template) [data-title="Footer"],
+body.metamint-hide-header-footer header.wp-block-template-part,
+body.metamint-hide-header-footer footer.wp-block-template-part,
+body.metamint-hide-header-footer .wp-block-template-part[data-type="core/template-part"][aria-label*="Header"],
+body.metamint-hide-header-footer .wp-block-template-part[data-type="core/template-part"][aria-label*="Footer"],
+body.metamint-hide-header-footer .wp-block-template-part[data-title*="Header"],
+body.metamint-hide-header-footer .wp-block-template-part[data-title*="Footer"],
+body.metamint-hide-header-footer .wp-block-template-part[data-slug*="header"],
+body.metamint-hide-header-footer .wp-block-template-part[data-slug*="footer"],
+body.metamint-hide-header-footer [data-title="Header"],
+body.metamint-hide-header-footer [data-title="Footer"] {
+  display: none !important;
+}
+
+body.post-type-page:not(.is-editing-template) .is-root-container,
+body.metamint-hide-header-footer .is-root-container {
+  padding-top: 40px !important;
+  padding-bottom: 40px !important;
+}

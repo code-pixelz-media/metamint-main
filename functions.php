@@ -73,6 +73,46 @@ add_action('enqueue_block_editor_assets', function () {
 		[],
 		null
 	);
+
+	wp_enqueue_script(
+		'metamint-editor-hide-header-footer',
+		METAMINT_URI . '/assets/js/editor-hide-header-footer.js',
+		['wp-blocks', 'wp-dom-ready', 'wp-data'],
+		time(),
+		true
+	);
+
+	// Ensure styles are also injected directly into editor assets
+	$editor_css = '
+		body.post-type-page:not(.is-editing-template) header.wp-block-template-part,
+		body.post-type-page:not(.is-editing-template) footer.wp-block-template-part,
+		body.post-type-page:not(.is-editing-template) .wp-block-template-part[data-type="core/template-part"][aria-label*="Header"],
+		body.post-type-page:not(.is-editing-template) .wp-block-template-part[data-type="core/template-part"][aria-label*="Footer"],
+		body.post-type-page:not(.is-editing-template) .wp-block-template-part[data-title*="Header"],
+		body.post-type-page:not(.is-editing-template) .wp-block-template-part[data-title*="Footer"],
+		body.post-type-page:not(.is-editing-template) .wp-block-template-part[data-slug*="header"],
+		body.post-type-page:not(.is-editing-template) .wp-block-template-part[data-slug*="footer"],
+		body.post-type-page:not(.is-editing-template) [data-title="Header"],
+		body.post-type-page:not(.is-editing-template) [data-title="Footer"],
+		body.metamint-hide-header-footer header.wp-block-template-part,
+		body.metamint-hide-header-footer footer.wp-block-template-part,
+		body.metamint-hide-header-footer .wp-block-template-part[data-type="core/template-part"][aria-label*="Header"],
+		body.metamint-hide-header-footer .wp-block-template-part[data-type="core/template-part"][aria-label*="Footer"],
+		body.metamint-hide-header-footer .wp-block-template-part[data-title*="Header"],
+		body.metamint-hide-header-footer .wp-block-template-part[data-title*="Footer"],
+		body.metamint-hide-header-footer .wp-block-template-part[data-slug*="header"],
+		body.metamint-hide-header-footer .wp-block-template-part[data-slug*="footer"],
+		body.metamint-hide-header-footer [data-title="Header"],
+		body.metamint-hide-header-footer [data-title="Footer"] {
+			display: none !important;
+		}
+		body.post-type-page:not(.is-editing-template) .is-root-container,
+		body.metamint-hide-header-footer .is-root-container {
+			padding-top: 40px !important;
+			padding-bottom: 40px !important;
+		}
+	';
+	wp_add_inline_style('metamint-editor-fonts', $editor_css);
 });
 
 
@@ -125,3 +165,4 @@ function mm_field(string $key, $fallback = '', $post_id = false)
 	}
 	return $fallback;
 }
+
